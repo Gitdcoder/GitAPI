@@ -1,0 +1,9 @@
+Groups:
+  Gold:
+    Permissions:
+      - test
+      - test2
+  Moon:
+    Permissions:
+      - test3
+      - test4

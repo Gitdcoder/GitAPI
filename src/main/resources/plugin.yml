@@ -1,0 +1,5 @@
+name: GitAPI
+author: GitCoder
+main: net.gitcoder.api.bukkit.GitAPI
+version: 1.0 Beta
+description: Творим добро!
