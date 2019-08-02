@@ -49,8 +49,6 @@ public abstract class GamePerk implements Listener {
 
         this.cost = cost;
         this.level = level;
-
-        GitAPI.getPlugin(GitAPI.class).MANAGEMENT.PERK_MANAGER.createPerk(this);
     }
 
     /**

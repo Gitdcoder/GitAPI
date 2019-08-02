@@ -1,5 +1,7 @@
 package net.gitcoder.api.bukkit.game.perk;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+import lombok.NonNull;
 import net.gitcoder.api.bukkit.GitAPI;
 import org.bukkit.Bukkit;
 
@@ -15,31 +17,30 @@ import java.util.*;
  */
 public class PerkManager {
 
-    private final Map<String, GamePerk> gamePerks = new HashMap<>();
+    private final TIntObjectHashMap<GamePerk> gamePerkTIntObjectHashMap = new TIntObjectHashMap<>();
+
+    private final Map<String, GamePerk> gamePerkHashMap = new HashMap<>();
+
     private final GitAPI gitAPI = GitAPI.getPlugin(GitAPI.class);
 
     /**
      * Регистрация перков.
      * @param gamePerk - игровой перк.
      */
-    public void registerPerk(Class<? extends GamePerk> gamePerk) {
+    public void registerPerk(int id, @NonNull Class<? extends GamePerk> gamePerk) {
 
         try {
 
             GamePerk perk = gamePerk.newInstance();
+
+            gamePerkHashMap.put(perk.getPerkName().toLowerCase(), perk);
+            gamePerkTIntObjectHashMap.put(id, perk);
+
             Bukkit.getPluginManager().registerEvents(perk, gitAPI);
 
         } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Создание перка.
-     * @param gamePerk - игровой перк.
-     */
-    void createPerk(GamePerk gamePerk) {
-        gamePerks.put(gamePerk.getPerkName().toLowerCase(), gamePerk);
     }
 
     /**
@@ -50,7 +51,7 @@ public class PerkManager {
     public Collection<GamePerk> getPerksByLevel(int level) {
         List<GamePerk> list = new ArrayList<>();
 
-        for (GamePerk gamePerk : gamePerks.values()) {
+        for (GamePerk gamePerk : gamePerkHashMap.values()) {
             if (gamePerk.getLevel() == level) {
                 list.add(gamePerk);
             }
@@ -68,7 +69,7 @@ public class PerkManager {
     public Collection<GamePerk> getPerkByCost(int cost) {
         List<GamePerk> list = new ArrayList<>();
 
-        for (GamePerk gamePerk : gamePerks.values()) {
+        for (GamePerk gamePerk : gamePerkHashMap.values()) {
             if (gamePerk.getCost() == cost) {
                 list.add(gamePerk);
             }
@@ -84,6 +85,15 @@ public class PerkManager {
      * @return - перк.
      */
     public GamePerk getPerkByName(String name) {
-        return gamePerks.get(name.toLowerCase());
+        return gamePerkHashMap.get(name.toLowerCase());
+    }
+
+    /**
+     * Получение перка по его ID;
+     * @param id - id;
+     * @return - игровой перк.
+     */
+    public GamePerk getPerkById(int id) {
+        return gamePerkTIntObjectHashMap.get(id);
     }
 }

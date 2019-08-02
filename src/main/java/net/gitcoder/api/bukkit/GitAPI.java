@@ -39,7 +39,6 @@ public class GitAPI extends JavaPlugin {
         //LoggerUtil.info("",true,"События были загружены во внутренний кеш");
 
         registerProtocolListener();
-
     }
 
     /**
@@ -61,5 +60,13 @@ public class GitAPI extends JavaPlugin {
 
     public MySQL getDatabase() {
         return DATABASE;
+    }
+
+    public boolean isHub() {
+        return Bukkit.getServerName().contains("Hub-");
+    }
+
+    public boolean isLobby() {
+        return Bukkit.getServerName().contains("Lobby-");
     }
 }

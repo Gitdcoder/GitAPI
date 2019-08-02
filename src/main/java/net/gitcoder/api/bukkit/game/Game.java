@@ -53,10 +53,13 @@ public abstract class Game extends GameAnnouncer implements Listener {
      * @param gameType - тип игры.
      * @param players - количество людей.
      */
-    public Game(GameType gameType, int players) {
+    public Game(GameType gameType,
+                int players) {
+
         GAME_SETTING.GAME_TYPE = gameType;
 
         GAME_SETTING.MAX_PLAYERS_COUNT = players;
+
     }
 
     /**
@@ -92,9 +95,19 @@ public abstract class Game extends GameAnnouncer implements Listener {
      * @param id - ид.
      * @param listener - листенер.
      */
-    public void registerListener(Integer id, @NonNull Listener listener) {
-        pluginManager.registerEvents(listener, GitAPI.getPlugin(GitAPI.class));
-        cache.put(id, listener);
+    public void registerListener(Integer id, @NonNull Class<? extends Listener> listener) {
+
+        Listener event = null;
+
+        try {
+            event = listener.newInstance();
+        } catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        pluginManager.registerEvents(event, GitAPI.getPlugin(GitAPI.class));
+
+        cache.put(id, event);
     }
 
     /**
