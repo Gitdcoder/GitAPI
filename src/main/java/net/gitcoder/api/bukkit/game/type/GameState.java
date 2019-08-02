@@ -13,5 +13,5 @@ public enum GameState {
     WAITING(),
     STARTING(),
     GAME(),
-    END_GAME();
+    END_GAME()
 }

@@ -10,7 +10,7 @@ import org.bukkit.Bukkit;
  * <p>
  * All right's is reserved.
  */
-public final class GameAnnouncer {
+public class GameAnnouncer {
 
     /**
      * Оповещает всех игроков.

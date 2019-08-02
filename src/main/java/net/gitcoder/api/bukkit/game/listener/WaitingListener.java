@@ -15,7 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * <p>
  * All right's is reserved.
  */
-public class WaitingListener implements Listener {
+public final class WaitingListener implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent event) {

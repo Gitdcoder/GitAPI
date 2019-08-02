@@ -41,22 +41,4 @@ public final class Management {
     public final Map<String, GitServer> PROXY_SERVERS_MAP = new HashMap<>();
 
     public int GLOBAL_ONLINE = 0;
-
-    /**
-     * Получение геймера из хранилищаю
-     * @param name - имя игрока.
-     * @return - Gamer.
-     */
-    public Gamer getGamer(String name) {
-        return GAMER_STORAGE.getGamer(name);
-    }
-
-    /**
-     * Получение геймера из хранилищаю
-     * @param player - игрок.
-     * @return - Gamer.
-     */
-    public Gamer getGamer(Player player) {
-        return GAMER_STORAGE.getGamer(player.getName());
-    }
 }

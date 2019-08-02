@@ -1,5 +1,6 @@
 package net.gitcoder.api.bukkit.command;
 
+import net.gitcoder.api.bukkit.GitAPI;
 import net.gitcoder.api.bukkit.Management;
 import net.gitcoder.api.bukkit.gamer.humans.Gamer;
 import org.bukkit.command.Command;
@@ -31,7 +32,7 @@ public abstract class BaseCommand extends Command implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         final Player player = (Player) commandSender;
-        final Gamer gamer = Management.getGamer(player.getName());
+        final Gamer gamer = GitAPI.MANAGEMENT.GAMER_STORAGE.getGamer(player.getName());
 
         executeCommand(player, gamer, strings);
         return false;

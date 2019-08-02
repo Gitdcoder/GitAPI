@@ -45,6 +45,15 @@ public class GamerStorage {
         return gamers.get(name.toLowerCase());
     }
 
+    /**
+     * Получение игрока из кеша.
+     * @param player - имя игрока.
+     * @return - геймера.
+     */
+    public Gamer getGamer(Player player) {
+        return gamers.get(player.getName().toLowerCase());
+    }
+
     public Collection<Gamer> getGamers() {
         return gamers.values();
     }

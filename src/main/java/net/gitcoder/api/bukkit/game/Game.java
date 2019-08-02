@@ -34,18 +34,21 @@ import java.util.stream.Collectors;
  */
 public abstract class Game extends GameAnnouncer implements Listener {
 
-    private final Management MANAGEMENT = GitAPI.MANAGEMENT;
+    protected final Management MANAGEMENT = GitAPI.MANAGEMENT;
 
-    public final GameSettings GAME_SETTINGS = MANAGEMENT.GAME_SETTINGS;
+    protected final GameSettings GAME_SETTINGS = MANAGEMENT.GAME_SETTINGS;
 
-    private final Map<Integer, Listener> cache = new HashMap<>();
+
+    private final Map<Integer, Listener> listenerMap = new HashMap<>();
+
 
     @Getter
     private final List<Gamer> alivePlayers = new ArrayList<>();
 
-    private SpectatorManager spectatorManager = new SpectatorManager();
-    private GameState gameState = GameState.WAITING;
-    private PluginManager pluginManager = Bukkit.getPluginManager();
+
+    private final SpectatorManager spectatorManager = new SpectatorManager();
+    private final GameState gameState = GameState.WAITING;
+    private final PluginManager pluginManager = Bukkit.getPluginManager();
 
     /**
      * Конструктор, устанавливает игру,
@@ -54,8 +57,7 @@ public abstract class Game extends GameAnnouncer implements Listener {
      * @param gameType - тип игры.
      * @param players - количество людей.
      */
-    public Game(GameType gameType,
-                int players) {
+    public Game(GameType gameType, int players) {
 
         GAME_SETTINGS.GAME_TYPE = gameType;
 
@@ -107,7 +109,7 @@ public abstract class Game extends GameAnnouncer implements Listener {
 
         pluginManager.registerEvents(event, GitAPI.getInstance());
 
-        cache.put(id, event);
+        listenerMap.put(id, event);
     }
 
     /**
@@ -115,15 +117,15 @@ public abstract class Game extends GameAnnouncer implements Listener {
      * @param id - ид.
      */
     public void unRegisterListener(Integer id) {
-        HandlerList.unregisterAll(cache.get(id));
+        HandlerList.unregisterAll(listenerMap.get(id));
     }
 
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler
     public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event) {
         final int online = Bukkit.getOnlinePlayers().size();
         final int maxOnline = MANAGEMENT.GAME_SETTINGS.MAX_PLAYERS_COUNT;
 
-        Gamer gamer = MANAGEMENT.getGamer(event.getName());
+        Gamer gamer = MANAGEMENT.GAMER_STORAGE.getGamer(event.getName());
 
         if (gameState.equals(GameState.STARTING)) {
             List<Gamer> gamers = new ArrayList<>();
@@ -139,8 +141,7 @@ public abstract class Game extends GameAnnouncer implements Listener {
                 gamer.getPlayer().sendMessage("§cАрена на данной игре начинается...");
             }
 
-            final Gamer randomGamer = gamers.
-                    stream().
+            final Gamer randomGamer = gamers.stream().
                     sorted(Comparator.comparing(sortedGamer -> sortedGamer.getGroup().getLevel())).
                     collect(Collectors.toList()).get(0);
 
@@ -155,7 +156,7 @@ public abstract class Game extends GameAnnouncer implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final Gamer gamer = MANAGEMENT.getGamer(player);
+        final Gamer gamer = MANAGEMENT.GAMER_STORAGE.getGamer(player);
 
         if (gameState.equals(GameState.GAME)) {
             spectatorManager.setSpectator(player);
