@@ -18,6 +18,15 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class WaitingListener implements Listener {
 
     @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Action action = event.getAction();
+
+        if (action.equals(Action.PHYSICAL)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
     public void onBreakBlock(BlockBreakEvent event) {
         event.setCancelled(true);
     }
@@ -35,15 +44,6 @@ public class WaitingListener implements Listener {
     @EventHandler
     public void onFoodChange(FoodLevelChangeEvent event) {
         event.setCancelled(true);
-    }
-
-    @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        Action action = event.getAction();
-
-        if (action.equals(Action.PHYSICAL)) {
-            event.setCancelled(true);
-        }
     }
 
     @EventHandler

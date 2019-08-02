@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
  * <p>
  * All right's is reserved.
  */
-public class WaitingBoard {
+public final class WaitingBoard {
 
     private static final Board COMMON_BOARD = CommonBoard
             .newBuilder()

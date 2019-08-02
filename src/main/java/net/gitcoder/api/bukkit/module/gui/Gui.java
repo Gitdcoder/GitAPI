@@ -48,7 +48,7 @@ public abstract class Gui implements GuiAPI {
         this.player = player;
 
         GuiListener guiListener = new GuiListener(this);
-        Bukkit.getPluginManager().registerEvents(guiListener, GitAPI.getPlugin(GitAPI.class));
+        Bukkit.getPluginManager().registerEvents(guiListener, GitAPI.getInstance());
 
     }
 

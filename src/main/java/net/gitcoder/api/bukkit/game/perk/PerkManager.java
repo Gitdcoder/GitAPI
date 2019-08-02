@@ -15,20 +15,19 @@ import java.util.*;
  * <p>
  * All right's is reserved.
  */
-public class PerkManager {
+public final class PerkManager {
 
     private final TIntObjectHashMap<GamePerk> gamePerkTIntObjectHashMap = new TIntObjectHashMap<>();
 
     private final Map<String, GamePerk> gamePerkHashMap = new HashMap<>();
 
-    private final GitAPI gitAPI = GitAPI.getPlugin(GitAPI.class);
+    private final GitAPI gitAPI = GitAPI.getInstance();
 
     /**
      * Регистрация перков.
      * @param gamePerk - игровой перк.
      */
     public void registerPerk(int id, @NonNull Class<? extends GamePerk> gamePerk) {
-
         try {
 
             GamePerk perk = gamePerk.newInstance();
@@ -96,4 +95,5 @@ public class PerkManager {
     public GamePerk getPerkById(int id) {
         return gamePerkTIntObjectHashMap.get(id);
     }
+
 }

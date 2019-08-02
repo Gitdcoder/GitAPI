@@ -2,7 +2,7 @@ package net.gitcoder.api.java.packet.scoreboard;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
+import net.gitcoder.api.java.packet.AbstractPacket;
 
 public class WrapperPlayServerScoreboardDisplayObjective extends AbstractPacket {
 	public static final PacketType TYPE =

@@ -10,14 +10,14 @@ import org.bukkit.Bukkit;
  * <p>
  * All right's is reserved.
  */
-public class GameAnnouncer {
+public final class GameAnnouncer {
 
     /**
      * Оповещает всех игроков.
      * @param message - текст.
      * @param prefix - нужен ли префикс.
      */
-    public void broadcast(String message, boolean prefix) {
+    protected void broadcast(String message, boolean prefix) {
 
         if (prefix) Bukkit.broadcastMessage("" + message);
         else Bukkit.broadcastMessage(message);
@@ -27,7 +27,8 @@ public class GameAnnouncer {
      * Оповещает всех спектаторов.
      * @param message - сообщение.
      */
-    public void broadcastToSpectator(String message) {
+    protected void broadcastToSpectator(String message) {
 
     }
+
 }

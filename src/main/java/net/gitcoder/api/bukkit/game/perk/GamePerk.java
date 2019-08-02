@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemStack;
  * <p>
  * All right's is reserved.
  */
-
 @Getter
 public abstract class GamePerk implements Listener {
 
@@ -56,18 +55,14 @@ public abstract class GamePerk implements Listener {
      *
      * @param player - игрок.
      */
-    protected void onUse(Player player) {
-
-    }
+    protected void onUse(Player player) { }
 
     /**
      * Активая перка.
      *
      * @param gamer - геймер.
      */
-    protected void onUse(Gamer gamer) {
-
-    }
+    protected void onUse(Gamer gamer) { }
 
     /**
      * Установка перка игроку.
@@ -86,4 +81,5 @@ public abstract class GamePerk implements Listener {
     public boolean hasPerk(Gamer gamer) {
         return gamer.hasPerk(this);
     }
+
 }

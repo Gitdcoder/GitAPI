@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class StringUtil {
 
-    static int charCount(String input) {
+    public static int charCount(String input) {
         return countCharacters(input).get(org.bukkit.ChatColor.COLOR_CHAR);
     }
 
@@ -70,7 +70,7 @@ public class StringUtil {
         }
     }
 
-    public String formatTime(long ms, FormatTimeUtil formatTimeUtil) {
+    public String formatTime(long ms, FormatTime formatTimeUtil) {
         if (ms % 100L > 10L && ms % 100L < 15L) {
             return ms + formatTimeUtil.three;
         } else {
@@ -109,11 +109,11 @@ public class StringUtil {
 
         StringBuilder builder = new StringBuilder();
 
-        if (w > 0) builder.append(formatTime(w, FormatTimeUtil.WEEK)).append(" ");
-        if (d > 0) builder.append(formatTime(d, FormatTimeUtil.DAYS)).append(" ");
-        if (h > 0) builder.append(formatTime(h, FormatTimeUtil.HOURS)).append(" ");
-        if (m > 0) builder.append(formatTime(m, FormatTimeUtil.MINUTES)).append(" ");
-        if (s > 0) builder.append(formatTime(s, FormatTimeUtil.SECONDS)).append(" ");
+        if (w > 0) builder.append(formatTime(w, FormatTime.WEEK)).append(" ");
+        if (d > 0) builder.append(formatTime(d, FormatTime.DAYS)).append(" ");
+        if (h > 0) builder.append(formatTime(h, FormatTime.HOURS)).append(" ");
+        if (m > 0) builder.append(formatTime(m, FormatTime.MINUTES)).append(" ");
+        if (s > 0) builder.append(formatTime(s, FormatTime.SECONDS)).append(" ");
 
         return builder.toString();
     }

@@ -21,7 +21,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
  */
 public class GamerListener implements Listener {
 
-    private final GitAPI gitAPI = GitAPI.getPlugin(GitAPI.class);
+    private final GitAPI gitAPI = GitAPI.getInstance();
     private final Management MANAGEMENT = gitAPI.MANAGEMENT;
 
     @EventHandler

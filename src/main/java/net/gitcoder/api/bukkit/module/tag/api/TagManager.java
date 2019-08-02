@@ -1,6 +1,6 @@
 package net.gitcoder.api.bukkit.module.tag.api;
 
-import net.gitcoder.api.java.utility.TagDataMapUtil;
+import net.gitcoder.api.bukkit.utility.TagDataMapUtil;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;

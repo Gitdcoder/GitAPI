@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class SQLPerkHandler {
 
-    private final GitAPI gitAPI = GitAPI.getPlugin(GitAPI.class);
+    private final GitAPI gitAPI = GitAPI.getInstance();
     private final Management MANAGEMENT = gitAPI.MANAGEMENT;
 
     /**

@@ -1,11 +1,12 @@
 package net.gitcoder.api.bukkit.game;
 
+import lombok.Getter;
 import lombok.NonNull;
 import net.gitcoder.api.bukkit.GitAPI;
 import net.gitcoder.api.bukkit.Management;
 import net.gitcoder.api.bukkit.game.announcer.GameAnnouncer;
 import net.gitcoder.api.bukkit.game.perk.GamePerk;
-import net.gitcoder.api.bukkit.game.setting.GameSetting;
+import net.gitcoder.api.bukkit.game.setting.GameSettings;
 import net.gitcoder.api.bukkit.game.type.GameState;
 import net.gitcoder.api.bukkit.game.type.GameType;
 import net.gitcoder.api.bukkit.gamer.humans.Gamer;
@@ -33,14 +34,14 @@ import java.util.stream.Collectors;
  */
 public abstract class Game extends GameAnnouncer implements Listener {
 
-    private final GitAPI gitAPI = GitAPI.getPlugin(GitAPI.class);
-    private final Management MANAGEMENT = gitAPI.MANAGEMENT;
+    private final Management MANAGEMENT = GitAPI.MANAGEMENT;
 
-    public final GameSetting GAME_SETTING = MANAGEMENT.GAME_SETTING;
+    public final GameSettings GAME_SETTINGS = MANAGEMENT.GAME_SETTINGS;
 
     private final Map<Integer, Listener> cache = new HashMap<>();
 
-    private final List<Gamer> players = new ArrayList<>();
+    @Getter
+    private final List<Gamer> alivePlayers = new ArrayList<>();
 
     private SpectatorManager spectatorManager = new SpectatorManager();
     private GameState gameState = GameState.WAITING;
@@ -56,10 +57,9 @@ public abstract class Game extends GameAnnouncer implements Listener {
     public Game(GameType gameType,
                 int players) {
 
-        GAME_SETTING.GAME_TYPE = gameType;
+        GAME_SETTINGS.GAME_TYPE = gameType;
 
-        GAME_SETTING.MAX_PLAYERS_COUNT = players;
-
+        GAME_SETTINGS.MAX_PLAYERS_COUNT = players;
     }
 
     /**
@@ -105,7 +105,7 @@ public abstract class Game extends GameAnnouncer implements Listener {
             e.printStackTrace();
         }
 
-        pluginManager.registerEvents(event, GitAPI.getPlugin(GitAPI.class));
+        pluginManager.registerEvents(event, GitAPI.getInstance());
 
         cache.put(id, event);
     }
@@ -121,7 +121,7 @@ public abstract class Game extends GameAnnouncer implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event) {
         final int online = Bukkit.getOnlinePlayers().size();
-        final int maxOnline = MANAGEMENT.GAME_SETTING.MAX_PLAYERS_COUNT;
+        final int maxOnline = MANAGEMENT.GAME_SETTINGS.MAX_PLAYERS_COUNT;
 
         Gamer gamer = MANAGEMENT.getGamer(event.getName());
 
@@ -166,7 +166,7 @@ public abstract class Game extends GameAnnouncer implements Listener {
 
         final String joinMessage = "Игрок %s §fприсоединился к игре (§c%s§8/§a%s)";
         final int online = Bukkit.getOnlinePlayers().size();
-        final int maxOnline = MANAGEMENT.GAME_SETTING.MAX_PLAYERS_COUNT;
+        final int maxOnline = MANAGEMENT.GAME_SETTINGS.MAX_PLAYERS_COUNT;
 
         broadcast(String.format(joinMessage, player.getDisplayName(), online, maxOnline), true);
 
@@ -186,11 +186,4 @@ public abstract class Game extends GameAnnouncer implements Listener {
         onDeath(player, killer);
     }
 
-    /**
-     * Получение всез геймеров.
-     * @return - лист с геймерами.
-     */
-    public final List<Gamer> getAlivePlayers() {
-        return players;
-    }
 }

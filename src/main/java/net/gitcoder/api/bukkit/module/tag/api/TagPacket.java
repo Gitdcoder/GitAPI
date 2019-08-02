@@ -2,7 +2,7 @@ package net.gitcoder.api.bukkit.module.tag.api;
 
 import com.google.common.collect.Sets;
 import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;
-import net.gitcoder.api.java.utility.TeamTagUtil;
+import net.gitcoder.api.bukkit.utility.TeamTagUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;

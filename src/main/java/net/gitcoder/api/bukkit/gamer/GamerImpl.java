@@ -28,7 +28,7 @@ import java.util.Map;
 @Getter
 public class GamerImpl implements Gamer, SpectatorHumanGamer {
 
-    private final GitAPI gitAPI = GitAPI.getPlugin(GitAPI.class);
+    private final GitAPI gitAPI = GitAPI.getInstance();
 
     private GamerPermissible gamerPermissible;
 

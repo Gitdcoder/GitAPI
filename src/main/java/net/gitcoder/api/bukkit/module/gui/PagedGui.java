@@ -11,7 +11,7 @@ import net.gitcoder.api.bukkit.module.gui.action.ClickAction;
 import net.gitcoder.api.bukkit.module.gui.api.GuiAPI;
 import net.gitcoder.api.bukkit.module.gui.item.GuiItem;
 import net.gitcoder.api.bukkit.module.gui.listener.PagedGuiListener;
-import net.gitcoder.api.java.utility.ItemUtil;
+import net.gitcoder.api.bukkit.utility.ItemUtil;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -73,7 +73,7 @@ public abstract class PagedGui implements GuiAPI {
         this.name = name;
 
         PagedGuiListener pagedGuiListener = new PagedGuiListener(this);
-        Bukkit.getPluginManager().registerEvents(pagedGuiListener, GitAPI.getPlugin(GitAPI.class));
+        Bukkit.getPluginManager().registerEvents(pagedGuiListener, GitAPI.getInstance());
     }
 
     /**

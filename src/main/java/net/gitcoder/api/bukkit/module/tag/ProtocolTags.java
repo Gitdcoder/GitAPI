@@ -3,7 +3,7 @@ package net.gitcoder.api.bukkit.module.tag;
 import net.gitcoder.api.bukkit.Management;
 import net.gitcoder.api.bukkit.gamer.group.Group;
 import net.gitcoder.api.bukkit.module.tag.api.TagManager;
-import net.gitcoder.api.java.utility.TeamTagUtil;
+import net.gitcoder.api.bukkit.utility.TeamTagUtil;
 import org.bukkit.entity.Player;
 
 public class ProtocolTags {

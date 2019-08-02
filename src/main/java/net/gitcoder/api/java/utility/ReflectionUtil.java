@@ -16,7 +16,7 @@ import java.util.Objects;
  * <p>
  * All right's is reserved.
  */
-public class ReflectionUtil {
+public final class ReflectionUtil {
 
     public void setDeclaredField(Object object, String field, Object value) throws IllegalAccessException, NoSuchFieldException {
         Field f = object.getClass().getDeclaredField(field);

@@ -24,7 +24,7 @@ import java.util.List;
 @Setter
 public class Group {
 
-    private static final File file = new File(GitAPI.getPlugin(GitAPI.class).getDataFolder(), "groups.yml");
+    private static final File file = new File(GitAPI.getInstance().getDataFolder(), "groups.yml");
 
     private String group;
     private String prefix;

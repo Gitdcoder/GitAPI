@@ -6,7 +6,7 @@ import net.gitcoder.api.bukkit.module.entity.FakeEntity;
 import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerNamedEntitySpawn;
 import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerPlayerInfo;
 import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;
-import net.gitcoder.api.java.utility.MojangUtil;
+import net.gitcoder.api.bukkit.utility.MojangUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;

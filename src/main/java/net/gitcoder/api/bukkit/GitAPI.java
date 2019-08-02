@@ -1,9 +1,11 @@
 package net.gitcoder.api.bukkit;
 
 import com.comphenix.protocol.ProtocolLibrary;
+import lombok.Getter;
 import net.gitcoder.api.bukkit.gamer.listener.GamerListener;
 import net.gitcoder.api.bukkit.module.entity.listeners.FakeEntityClickListener;
 import net.gitcoder.api.bukkit.module.tag.listeners.PlayerTagListener;
+import net.gitcoder.api.bukkit.server.GitServer;
 import net.gitcoder.api.java.mysql.MySQL;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,55 +20,77 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class GitAPI extends JavaPlugin {
 
-    private final MySQL DATABASE = MySQL
+    @Getter
+    private final MySQL database = MySQL
             .newBuilder()
             .host("localhost")
             .user("root")
             .database("database")
             .create();
 
-    public Management MANAGEMENT = new Management();
+    @Getter
+    public static GitAPI instance; {
+        instance = this;
+    }
 
-    /**
-     * Override method, triggered when the server start.
-     */
+    public static Management MANAGEMENT = new Management();
+
+
     @Override
     public void onEnable() {
-
         Bukkit.getPluginManager().registerEvents(new GamerListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerTagListener(), this);
 
-        //LoggerUtil.info("",true,"События были загружены во внутренний кеш");
-
         registerProtocolListener();
+        readPackets();
+    }
+
+    /**
+     * @ItzStonlex
+     *
+     * Чтение пакетов, приходящих с бомжи
+     */
+    private void readPackets() {
+        /*
+         * @ItzStonlex
+         *
+         * Обновление глобального онлайна
+         */
+        MANAGEMENT.PACKET_PROTOCOL.readPacket(0, dataInput -> MANAGEMENT.GLOBAL_ONLINE = dataInput.readInt());
+
+
+        /*
+          @ItzStonlex
+         *
+         * Обновление данных серверов бомжи
+         */
+        MANAGEMENT.PACKET_PROTOCOL.readPacket(1, dataInput -> {
+            MANAGEMENT.PROXY_SERVERS_MAP.clear();
+
+            int serversCount = dataInput.readInt();
+
+            for (int i = 0 ; i < serversCount ; i++) {
+                String serverName = dataInput.readUTF();
+                String serverMotd = dataInput.readUTF();
+                String serverAddress = dataInput.readUTF();
+
+                int playersCount = dataInput.readInt();
+                int serverPort = dataInput.readInt();
+
+                GitServer gitServer = new GitServer(serverName, serverMotd, serverAddress,
+                                                    playersCount, serverPort);
+
+                MANAGEMENT.PROXY_SERVERS_MAP.put(serverName, gitServer);
+            }
+        });
     }
 
     /**
      * Регистрация пакетного листенера для прослушки клика
-     * по MoonFakeEntity
+     * по FakeEntity
      */
     private void registerProtocolListener() {
         ProtocolLibrary.getProtocolManager().addPacketListener(new FakeEntityClickListener(this));
     }
 
-
-    /**
-     * Override method, troggered when the server shut down.
-     */
-    @Override
-    public void onDisable() {
-
-    }
-
-    public MySQL getDatabase() {
-        return DATABASE;
-    }
-
-    public boolean isHub() {
-        return Bukkit.getServerName().contains("Hub-");
-    }
-
-    public boolean isLobby() {
-        return Bukkit.getServerName().contains("Lobby-");
-    }
 }

@@ -22,7 +22,7 @@ import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
+import net.gitcoder.api.java.packet.AbstractPacket;
 
 import java.util.List;
 

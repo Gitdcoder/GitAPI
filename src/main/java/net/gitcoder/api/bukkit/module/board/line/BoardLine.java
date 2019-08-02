@@ -2,7 +2,7 @@ package net.gitcoder.api.bukkit.module.board.line;
 
 import com.google.common.base.Splitter;
 import net.gitcoder.api.bukkit.module.board.Board;
-import net.gitcoder.api.java.utility.ColorUtil;
+import net.gitcoder.api.bukkit.utility.ColorUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Team;
