@@ -1,0 +1,1832 @@
+Index: src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerNamedEntitySpawn.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerNamedEntitySpawn.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerNamedEntitySpawn.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
+@@ -1,203 +0,0 @@
+-/**
+- * PacketWrapper - ProtocolLib wrappers for Minecraft packets
+- * Copyright (C) dmulloy2 <http://dmulloy2.net>
+- * Copyright (C) Kristian S. Strangeland
+- *
+- * This program is free software: you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation, either version 3 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+- */
+-package net.gitcoder.api.java.packet.packetwrapper;
+-
+-import com.comphenix.protocol.PacketType;
+-import com.comphenix.protocol.events.PacketContainer;
+-import com.comphenix.protocol.events.PacketEvent;
+-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+-import org.bukkit.World;
+-import org.bukkit.entity.Entity;
+-import org.bukkit.util.Vector;
+-
+-import java.util.UUID;
+-
+-public class WrapperPlayServerNamedEntitySpawn extends AbstractPacket {
+-	public static final PacketType TYPE =
+-			PacketType.Play.Server.NAMED_ENTITY_SPAWN;
+-
+-	public WrapperPlayServerNamedEntitySpawn() {
+-		super(new PacketContainer(TYPE), TYPE);
+-		handle.getModifier().writeDefaults();
+-	}
+-
+-	public WrapperPlayServerNamedEntitySpawn(PacketContainer packet) {
+-		super(packet, TYPE);
+-	}
+-
+-	/**
+-	 * Retrieve Entity ID.
+-	 * <p>
+-	 * Notes: entity's ID
+-	 * 
+-	 * @return The current Entity ID
+-	 */
+-	public int getEntityID() {
+-		return handle.getIntegers().read(0);
+-	}
+-
+-	/**
+-	 * Set Entity ID.
+-	 * 
+-	 * @param value - new value.
+-	 */
+-	public void setEntityID(int value) {
+-		handle.getIntegers().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve the entity of the painting that will be spawned.
+-	 * 
+-	 * @param world - the current world of the entity.
+-	 * @return The spawned entity.
+-	 */
+-	public Entity getEntity(World world) {
+-		return handle.getEntityModifier(world).read(0);
+-	}
+-
+-	/**
+-	 * Retrieve the entity of the painting that will be spawned.
+-	 * 
+-	 * @param event - the packet event.
+-	 * @return The spawned entity.
+-	 */
+-	public Entity getEntity(PacketEvent event) {
+-		return getEntity(event.getPlayer().getWorld());
+-	}
+-
+-	/**
+-	 * Retrieve Player UUID.
+-	 * <p>
+-	 * Notes: player's UUID
+-	 * 
+-	 * @return The current Player UUID
+-	 */
+-	public UUID getPlayerUUID() {
+-		return handle.getUUIDs().read(0);
+-	}
+-
+-	/**
+-	 * Set Player UUID.
+-	 * 
+-	 * @param value - new value.
+-	 */
+-	public void setPlayerUUID(UUID value) {
+-		handle.getUUIDs().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve the position of the spawned entity as a vector.
+-	 * 
+-	 * @return The position as a vector.
+-	 */
+-	public Vector getPosition() {
+-		return new Vector(getX(), getY(), getZ());
+-	}
+-
+-	/**
+-	 * Set the position of the spawned entity using a vector.
+-	 * 
+-	 * @param position - the new position.
+-	 */
+-	public void setPosition(Vector position) {
+-		setX(position.getX());
+-		setY(position.getY());
+-		setZ(position.getZ());
+-	}
+-
+-	public double getX() {
+-		return handle.getDoubles().read(0);
+-	}
+-
+-	public void setX(double value) {
+-		handle.getDoubles().write(0, value);
+-	}
+-
+-	public double getY() {
+-		return handle.getDoubles().read(1);
+-	}
+-
+-	public void setY(double value) {
+-		handle.getDoubles().write(1, value);
+-	}
+-
+-	public double getZ() {
+-		return handle.getDoubles().read(2);
+-	}
+-
+-	public void setZ(double value) {
+-		handle.getDoubles().write(2, value);
+-	}
+-
+-	/**
+-	 * Retrieve the yaw of the spawned entity.
+-	 * 
+-	 * @return The current Yaw
+-	 */
+-	public float getYaw() {
+-		return (handle.getBytes().read(0) * 360.F) / 256.0F;
+-	}
+-
+-	/**
+-	 * Set the yaw of the spawned entity.
+-	 * 
+-	 * @param value - new yaw.
+-	 */
+-	public void setYaw(float value) {
+-		handle.getBytes().write(0, (byte) (value * 256.0F / 360.0F));
+-	}
+-
+-	/**
+-	 * Retrieve the pitch of the spawned entity.
+-	 * 
+-	 * @return The current pitch
+-	 */
+-	public float getPitch() {
+-		return (handle.getBytes().read(1) * 360.F) / 256.0F;
+-	}
+-
+-	/**
+-	 * Set the pitch of the spawned entity.
+-	 * 
+-	 * @param value - new pitch.
+-	 */
+-	public void setPitch(float value) {
+-		handle.getBytes().write(1, (byte) (value * 256.0F / 360.0F));
+-	}
+-
+-	/**
+-	 * Retrieve Metadata.
+-	 * <p>
+-	 * Notes: the client will crash if no metadata is sent
+-	 * 
+-	 * @return The current Metadata
+-	 */
+-	public WrappedDataWatcher getMetadata() {
+-		return handle.getDataWatcherModifier().read(0);
+-	}
+-
+-	/**
+-	 * Set Metadata.
+-	 * 
+-	 * @param value - new value.
+-	 */
+-	public void setMetadata(WrappedDataWatcher value) {
+-		handle.getDataWatcherModifier().write(0, value);
+-	}
+-}
+\ No newline at end of file
+Index: src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardDisplayObjective.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardDisplayObjective.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardDisplayObjective.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
+@@ -1,78 +0,0 @@
+-/**
+- * PacketWrapper - ProtocolLib wrappers for Minecraft packets
+- * Copyright (C) dmulloy2 <http://dmulloy2.net>
+- * Copyright (C) Kristian S. Strangeland
+- *
+- * This program is free software: you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation, either version 3 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+- */
+-package net.gitcoder.api.java.packet.packetwrapper;
+-
+-import com.comphenix.protocol.PacketType;
+-import com.comphenix.protocol.events.PacketContainer;
+-
+-public class WrapperPlayServerScoreboardDisplayObjective extends AbstractPacket {
+-
+-	public static final PacketType TYPE = PacketType.Play.Server.SCOREBOARD_DISPLAY_OBJECTIVE;
+-
+-	public WrapperPlayServerScoreboardDisplayObjective() {
+-		super(new PacketContainer(TYPE), TYPE);
+-		handle.getModifier().writeDefaults();
+-	}
+-
+-	public WrapperPlayServerScoreboardDisplayObjective(PacketContainer packet) {
+-		super(packet, TYPE);
+-	}
+-
+-	/**
+-	 * Retrieve Position.
+-	 * <p>
+-	 * Notes: the position of the scoreboard. 0 = list, 1 = sidebar, 2 =
+-	 * belowName.
+-	 *
+-	 * @return The current Position
+-	 */
+-	public int getPosition() {
+-		return handle.getIntegers().read(0);
+-	}
+-
+-	/**
+-	 * Set Position.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setPosition(int value) {
+-		handle.getIntegers().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve Score Name.
+-	 * <p>
+-	 * Notes: the unique name for the scoreboard to be displayed.
+-	 *
+-	 * @return The current Score Name
+-	 */
+-	public String getScoreName() {
+-		return handle.getStrings().read(0);
+-	}
+-
+-	/**
+-	 * Set Score Name.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setScoreName(String value) {
+-		handle.getStrings().write(0, value);
+-	}
+-
+-}
+\ No newline at end of file
+Index: src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardObjective.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardObjective.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardObjective.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
+@@ -1,141 +0,0 @@
+-/**
+- * PacketWrapper - ProtocolLib wrappers for Minecraft packets
+- * Copyright (C) dmulloy2 <http://dmulloy2.net>
+- * Copyright (C) Kristian S. Strangeland
+- *
+- * This program is free software: you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation, either version 3 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+- */
+-package net.gitcoder.api.java.packet.packetwrapper;
+-
+-import com.comphenix.protocol.PacketType;
+-import com.comphenix.protocol.events.PacketContainer;
+-import com.comphenix.protocol.reflect.IntEnum;
+-import com.comphenix.protocol.wrappers.WrappedChatComponent;
+-
+-public class WrapperPlayServerScoreboardObjective extends AbstractPacket {
+-
+-	public static final PacketType TYPE = PacketType.Play.Server.SCOREBOARD_OBJECTIVE;
+-
+-	public WrapperPlayServerScoreboardObjective() {
+-		super(new PacketContainer(TYPE), TYPE);
+-		handle.getModifier().writeDefaults();
+-	}
+-
+-	public WrapperPlayServerScoreboardObjective(PacketContainer packet) {
+-		super(packet, TYPE);
+-	}
+-
+-	/**
+-	 * Enum containing all known packet modes.
+-	 *
+-	 * @author dmulloy2
+-	 */
+-	public static class Mode extends IntEnum {
+-		public static final int ADD_OBJECTIVE = 0;
+-		public static final int REMOVE_OBJECTIVE = 1;
+-		public static final int UPDATE_VALUE = 2;
+-
+-		private static final Mode INSTANCE = new Mode();
+-
+-		public static Mode getInstance() {
+-			return INSTANCE;
+-		}
+-	}
+-
+-	/**
+-	 * Retrieve Objective name.
+-	 * <p>
+-	 * Notes: an unique name for the objective
+-	 *
+-	 * @return The current Objective name
+-	 */
+-	public String getName() {
+-		return handle.getStrings().read(0);
+-	}
+-
+-	/**
+-	 * Set Objective name.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setName(String value) {
+-		handle.getStrings().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve Objective DisplayName.
+-	 * <p>
+-	 * Notes: only if mode is 0 or 2. The text to be displayed for the score.
+-	 *
+-	 * @return The current Objective value
+-	 */
+-	public WrappedChatComponent getDisplayName() {
+-		return handle.getChatComponents().read(0);
+-	}
+-
+-	/**
+-	 * Set Objective DisplayName.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setDisplayName(WrappedChatComponent value) {
+-		handle.getChatComponents().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve health display.
+-	 * <p>
+-	 * Notes: Can be either INTEGER or HEARTS
+-	 *
+-	 * @return the current health display value
+-	 */
+-	public HealthDisplay getHealthDisplay() {
+-		return handle.getEnumModifier(HealthDisplay.class, 2).read(0);
+-	}
+-
+-	/**
+-	 * Set health display.
+-	 *
+-	 * @param value - value
+-	 * @see #getHealthDisplay()
+-	 */
+-	public void setHealthDisplay(HealthDisplay value) {
+-		handle.getEnumModifier(HealthDisplay.class, 2).write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve Mode.
+-	 * <p>
+-	 * Notes: 0 to create the scoreboard. 1 to remove the scoreboard. 2 to
+-	 * update the display text.
+-	 *
+-	 * @return The current Mode
+-	 */
+-	public int getMode() {
+-		return handle.getIntegers().read(0);
+-	}
+-
+-	/**
+-	 * Set Mode.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setMode(int value) {
+-		handle.getIntegers().write(0, value);
+-	}
+-
+-	public enum HealthDisplay {
+-		INTEGER, HEARTS
+-	}
+-}
+\ No newline at end of file
+Index: src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerResourcePackSend.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerResourcePackSend.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerResourcePackSend.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
+@@ -1,81 +0,0 @@
+-/**
+- * PacketWrapper - ProtocolLib wrappers for Minecraft packets
+- * Copyright (C) dmulloy2 <http://dmulloy2.net>
+- * Copyright (C) Kristian S. Strangeland
+- *
+- * This program is free software: you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation, either version 3 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+- */
+-package net.gitcoder.api.java.packet.packetwrapper;
+-
+-import com.comphenix.protocol.PacketType;
+-import com.comphenix.protocol.events.PacketContainer;
+-
+-public class WrapperPlayServerResourcePackSend extends AbstractPacket {
+-	public static final PacketType TYPE =
+-			PacketType.Play.Server.RESOURCE_PACK_SEND;
+-
+-	public WrapperPlayServerResourcePackSend() {
+-		super(new PacketContainer(TYPE), TYPE);
+-		handle.getModifier().writeDefaults();
+-	}
+-
+-	public WrapperPlayServerResourcePackSend(PacketContainer packet) {
+-		super(packet, TYPE);
+-	}
+-
+-	/**
+-	 * Retrieve URL.
+-	 * <p>
+-	 * Notes: the URL to the resource pack.
+-	 * 
+-	 * @return The current URL
+-	 */
+-	public String getUrl() {
+-		return handle.getStrings().read(0);
+-	}
+-
+-	/**
+-	 * Set URL.
+-	 * 
+-	 * @param value - new value.
+-	 */
+-	public void setUrl(String value) {
+-		handle.getStrings().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve Hash.
+-	 * <p>
+-	 * Notes: a 40 character hexadecimal and lower-case SHA-1 hash of the
+-	 * resource pack file. (must be lower case in order to work) If it's not a
+-	 * 40 character hexadecimal string, the client will not use it for hash
+-	 * verification and likely waste bandwidth - but it will still treat it as a
+-	 * unique id
+-	 * 
+-	 * @return The current Hash
+-	 */
+-	public String getHash() {
+-		return handle.getStrings().read(1);
+-	}
+-
+-	/**
+-	 * Set Hash.
+-	 * 
+-	 * @param value - new value.
+-	 */
+-	public void setHash(String value) {
+-		handle.getStrings().write(1, value);
+-	}
+-
+-}
+\ No newline at end of file
+Index: src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayClientEntityAction.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayClientEntityAction.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayClientEntityAction.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
+@@ -1,121 +0,0 @@
+-/**
+- * PacketWrapper - ProtocolLib wrappers for Minecraft packets
+- * Copyright (C) dmulloy2 <http://dmulloy2.net>
+- * Copyright (C) Kristian S. Strangeland
+- *
+- * This program is free software: you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation, either version 3 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+- */
+-package net.gitcoder.api.java.packet.packetwrapper;
+-
+-import org.bukkit.World;
+-import org.bukkit.entity.Entity;
+-
+-import com.comphenix.protocol.PacketType;
+-import com.comphenix.protocol.events.PacketContainer;
+-import com.comphenix.protocol.events.PacketEvent;
+-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerAction;
+-
+-public class WrapperPlayClientEntityAction extends AbstractPacket {
+-	public static final PacketType TYPE = PacketType.Play.Client.ENTITY_ACTION;
+-
+-	public WrapperPlayClientEntityAction() {
+-		super(new PacketContainer(TYPE), TYPE);
+-		handle.getModifier().writeDefaults();
+-	}
+-
+-	public WrapperPlayClientEntityAction(PacketContainer packet) {
+-		super(packet, TYPE);
+-	}
+-
+-	/**
+-	 * Retrieve Entity ID.
+-	 * <p>
+-	 * Notes: entity's ID
+-	 * 
+-	 * @return The current Entity ID
+-	 */
+-	public int getEntityID() {
+-		return handle.getIntegers().read(0);
+-	}
+-
+-	/**
+-	 * Set Entity ID.
+-	 * 
+-	 * @param value - new value.
+-	 */
+-	public void setEntityID(int value) {
+-		handle.getIntegers().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve the entity of the painting that will be spawned.
+-	 * 
+-	 * @param world - the current world of the entity.
+-	 * @return The spawned entity.
+-	 */
+-	public Entity getEntity(World world) {
+-		return handle.getEntityModifier(world).read(0);
+-	}
+-
+-	/**
+-	 * Retrieve the entity of the painting that will be spawned.
+-	 * 
+-	 * @param event - the packet event.
+-	 * @return The spawned entity.
+-	 */
+-	public Entity getEntity(PacketEvent event) {
+-		return getEntity(event.getPlayer().getWorld());
+-	}
+-
+-	/**
+-	 * Retrieve Action ID.
+-	 * <p>
+-	 * Notes: the ID of the action, see below.
+-	 * 
+-	 * @return The current Action ID
+-	 */
+-	public PlayerAction getAction() {
+-		return handle.getPlayerActions().read(0);
+-	}
+-
+-	/**
+-	 * Set Action ID.
+-	 * 
+-	 * @param value - new value.
+-	 */
+-	public void setAction(PlayerAction value) {
+-		handle.getPlayerActions().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve Jump Boost.
+-	 * <p>
+-	 * Notes: horse jump boost. Ranged from 0 -> 100.
+-	 * 
+-	 * @return The current Jump Boost
+-	 */
+-	public int getJumpBoost() {
+-		return handle.getIntegers().read(1);
+-	}
+-
+-	/**
+-	 * Set Jump Boost.
+-	 * 
+-	 * @param value - new value.
+-	 */
+-	public void setJumpBoost(int value) {
+-		handle.getIntegers().write(1, value);
+-	}
+-
+-}
+\ No newline at end of file
+Index: src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerPlayerInfo.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerPlayerInfo.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerPlayerInfo.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
+@@ -1,55 +0,0 @@
+-/**
+- * PacketWrapper - ProtocolLib wrappers for Minecraft packets
+- * Copyright (C) dmulloy2 <http://dmulloy2.net>
+- * Copyright (C) Kristian S. Strangeland
+- *
+- * This program is free software: you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation, either version 3 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+- */
+-package net.gitcoder.api.java.packet.packetwrapper;
+-
+-import com.comphenix.protocol.PacketType;
+-import com.comphenix.protocol.events.PacketContainer;
+-import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
+-import com.comphenix.protocol.wrappers.PlayerInfoData;
+-
+-import java.util.List;
+-
+-public class WrapperPlayServerPlayerInfo extends AbstractPacket {
+-	public static final PacketType TYPE = PacketType.Play.Server.PLAYER_INFO;
+-
+-	public WrapperPlayServerPlayerInfo() {
+-		super(new PacketContainer(TYPE), TYPE);
+-		handle.getModifier().writeDefaults();
+-	}
+-
+-	public WrapperPlayServerPlayerInfo(PacketContainer packet) {
+-		super(packet, TYPE);
+-	}
+-
+-	public PlayerInfoAction getAction() {
+-		return handle.getPlayerInfoAction().read(0);
+-	}
+-
+-	public void setAction(PlayerInfoAction value) {
+-		handle.getPlayerInfoAction().write(0, value);
+-	}
+-
+-	public List<PlayerInfoData> getData() {
+-		return handle.getPlayerInfoDataLists().read(0);
+-	}
+-
+-	public void setData(List<PlayerInfoData> value) {
+-		handle.getPlayerInfoDataLists().write(0, value);
+-	}
+-}
+\ No newline at end of file
+Index: src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardTeam.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardTeam.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardTeam.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
+@@ -1,257 +0,0 @@
+-package net.gitcoder.api.java.packet.packetwrapper;
+-
+-import com.comphenix.protocol.PacketType;
+-import com.comphenix.protocol.events.PacketContainer;
+-import com.comphenix.protocol.reflect.IntEnum;
+-
+-import java.util.Collection;
+-import java.util.List;
+-
+-public class WrapperPlayServerScoreboardTeam extends AbstractPacket {
+-	public static final PacketType TYPE =
+-			PacketType.Play.Server.SCOREBOARD_TEAM;
+-
+-	public WrapperPlayServerScoreboardTeam() {
+-		super(new PacketContainer(TYPE), TYPE);
+-		handle.getModifier().writeDefaults();
+-	}
+-
+-	public WrapperPlayServerScoreboardTeam(PacketContainer packet) {
+-		super(packet, TYPE);
+-	}
+-
+-	/**
+-	 * Enum containing all known modes.
+-	 *
+-	 * @author dmulloy2
+-	 */
+-	public static class Mode extends IntEnum {
+-		public static final int TEAM_CREATED = 0;
+-		public static final int TEAM_REMOVED = 1;
+-		public static final int TEAM_UPDATED = 2;
+-		public static final int PLAYERS_ADDED = 3;
+-		public static final int PLAYERS_REMOVED = 4;
+-
+-		private static final Mode INSTANCE = new Mode();
+-
+-		public static Mode getInstance() {
+-			return INSTANCE;
+-		}
+-	}
+-
+-	/**
+-	 * Retrieve Team Name.
+-	 * <p>
+-	 * Notes: a unique name for the team. (Shared with scoreboard).
+-	 *
+-	 * @return The current Team Name
+-	 */
+-	public String getName() {
+-		return handle.getStrings().read(0);
+-	}
+-
+-	/**
+-	 * Set Team Name.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setName(String value) {
+-		handle.getStrings().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve Team Display Name.
+-	 * <p>
+-	 * Notes: only if Mode = 0 or 2.
+-	 *
+-	 * @return The current Team Display Name
+-	 */
+-	public String getDisplayName() {
+-		return handle.getStrings().read(1);
+-	}
+-
+-	/**
+-	 * Set Team Display Name.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setDisplayName(String value) {
+-		handle.getStrings().write(1, value);
+-	}
+-
+-	/**
+-	 * Retrieve Team Prefix.
+-	 * <p>
+-	 * Notes: only if Mode = 0 or 2. Displayed before the players' name that are
+-	 * part of this team.
+-	 *
+-	 * @return The current Team Prefix
+-	 */
+-	public String getPrefix() {
+-		return handle.getStrings().read(2);
+-	}
+-
+-	/**
+-	 * Set Team Prefix.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setPrefix(String value) {
+-		handle.getStrings().write(2, value);
+-	}
+-
+-	/**
+-	 * Retrieve Team Suffix.
+-	 * <p>
+-	 * Notes: only if Mode = 0 or 2. Displayed after the players' name that are
+-	 * part of this team.
+-	 *
+-	 * @return The current Team Suffix
+-	 */
+-	public String getSuffix() {
+-		return handle.getStrings().read(3);
+-	}
+-
+-	/**
+-	 * Set Team Suffix.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setSuffix(String value) {
+-		handle.getStrings().write(3, value);
+-	}
+-
+-	/**
+-	 * Retrieve Name Tag Visibility.
+-	 * <p>
+-	 * Notes: only if Mode = 0 or 2. always, hideForOtherTeams, hideForOwnTeam,
+-	 * never.
+-	 *
+-	 * @return The current Name Tag Visibility
+-	 */
+-	public String getNameTagVisibility() {
+-		return handle.getStrings().read(4);
+-	}
+-
+-	/**
+-	 * Set Name Tag Visibility.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setNameTagVisibility(String value) {
+-		handle.getStrings().write(4, value);
+-	}
+-
+-	/**
+-	 * Retrieve Color.
+-	 * <p>
+-	 * Notes: only if Mode = 0 or 2. Same as Chat colors.
+-	 *
+-	 * @return The current Color
+-	 */
+-	public int getColor() {
+-		return handle.getIntegers().read(0);
+-	}
+-
+-	/**
+-	 * Set Color.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setColor(int value) {
+-		handle.getIntegers().write(0, value);
+-	}
+-
+-	/**
+-	 * Get the collision rule.
+-	 * Notes: only if Mode = 0 or 2. always, pushOtherTeams, pushOwnTeam, never.
+-	 * @return The current collision rule
+-	 */
+-	public String getCollisionRule() {
+-		return handle.getStrings().read(5);
+-	}
+-
+-	/**
+-	 * Sets the collision rule.
+-	 * @param value - new value.
+-	 */
+-	public void setCollisionRule(String value) {
+-		handle.getStrings().write(5, value);
+-	}
+-
+-	/**
+-	 * Retrieve Players.
+-	 * <p>
+-	 * Notes: only if Mode = 0 or 3 or 4. Players to be added/remove from the
+-	 * team. Max 40 characters so may be uuid's later
+-	 *
+-	 * @return The current Players
+-	 */
+-	@SuppressWarnings("unchecked")
+-	public List<String> getPlayers() {
+-		return (List<String>) handle.getSpecificModifier(Collection.class)
+-				.read(0);
+-	}
+-
+-	/**
+-	 * Set Players.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setPlayers(List<String> value) {
+-		handle.getSpecificModifier(Collection.class).write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve Mode.
+-	 * <p>
+-	 * Notes: if 0 then the team is created. If 1 then the team is removed. If 2
+-	 * the team team information is updated. If 3 then new players are added to
+-	 * the team. If 4 then players are removed from the team.
+-	 *
+-	 * @return The current Mode
+-	 */
+-	public int getMode() {
+-		return handle.getIntegers().read(1);
+-	}
+-
+-	/**
+-	 * Set Mode.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setMode(int value) {
+-		handle.getIntegers().write(1, value);
+-	}
+-
+-	/**
+-	 * Retrieve pack option data. Pack data is calculated as follows:
+-	 *
+-	 * <pre>
+-	 * <code>
+-	 * int data = 0;
+-	 * if (team.allowFriendlyFire()) {
+-	 *     data |= 1;
+-	 * }
+-	 * if (team.canSeeFriendlyInvisibles()) {
+-	 *     data |= 2;
+-	 * }
+-	 * </code>
+-	 * </pre>
+-	 *
+-	 * @return The current pack option data
+-	 */
+-	public int getPackOptionData() {
+-		return handle.getIntegers().read(2);
+-	}
+-
+-	/**
+-	 * Set pack option data.
+-	 *
+-	 * @param value - new value
+-	 * @see #getPackOptionData()
+-	 */
+-	public void setPackOptionData(int value) {
+-		handle.getIntegers().write(2, value);
+-	}
+-}
+\ No newline at end of file
+Index: src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardScore.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardScore.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/packetwrapper/WrapperPlayServerScoreboardScore.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
+@@ -1,107 +0,0 @@
+-/**
+- * PacketWrapper - ProtocolLib wrappers for Minecraft packets
+- * Copyright (C) dmulloy2 <http://dmulloy2.net>
+- * Copyright (C) Kristian S. Strangeland
+- *
+- * This program is free software: you can redistribute it and/or modify
+- * it under the terms of the GNU General Public License as published by
+- * the Free Software Foundation, either version 3 of the License, or
+- * (at your option) any later version.
+- *
+- * This program is distributed in the hope that it will be useful,
+- * but WITHOUT ANY WARRANTY; without even the implied warranty of
+- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+- * GNU General Public License for more details.
+- *
+- * You should have received a copy of the GNU General Public License
+- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+- */
+-package net.gitcoder.api.java.packet.packetwrapper;
+-
+-import com.comphenix.protocol.PacketType;
+-import com.comphenix.protocol.events.PacketContainer;
+-import com.comphenix.protocol.wrappers.EnumWrappers.ScoreboardAction;
+-
+-public class WrapperPlayServerScoreboardScore extends AbstractPacket {
+-
+-	public static final PacketType TYPE = PacketType.Play.Server.SCOREBOARD_SCORE;
+-
+-	public WrapperPlayServerScoreboardScore() {
+-		super(new PacketContainer(TYPE), TYPE);
+-		handle.getModifier().writeDefaults();
+-	}
+-
+-	public WrapperPlayServerScoreboardScore(PacketContainer packet) {
+-		super(packet, TYPE);
+-	}
+-
+-	/**
+-	 * Retrieve Score name.
+-	 * <p>
+-	 * Notes: the name of the score to be updated or removed.
+-	 *
+-	 * @return The current Score name
+-	 */
+-	public String getScoreName() {
+-		return handle.getStrings().read(0);
+-	}
+-
+-	/**
+-	 * Set Score name.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setScoreName(String value) {
+-		handle.getStrings().write(0, value);
+-	}
+-
+-	/**
+-	 * Retrieve Objective Name.
+-	 * <p>
+-	 * Notes: the name of the objective the score belongs to.
+-	 *
+-	 * @return The current Objective Name
+-	 */
+-	public String getObjectiveName() {
+-		return handle.getStrings().read(1);
+-	}
+-
+-	/**
+-	 * Set Objective Name.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setObjectiveName(String value) {
+-		handle.getStrings().write(1, value);
+-	}
+-
+-	/**
+-	 * Retrieve Value.
+-	 * <p>
+-	 * Notes: the score to be displayed next to the entry. Only sent when
+-	 * Update/Remove does not equal 1.
+-	 *
+-	 * @return The current Value
+-	 */
+-	public int getValue() {
+-		return handle.getIntegers().read(0);
+-	}
+-
+-	/**
+-	 * Set Value.
+-	 *
+-	 * @param value - new value.
+-	 */
+-	public void setValue(int value) {
+-		handle.getIntegers().write(0, value);
+-	}
+-
+-	public ScoreboardAction getAction() {
+-		return handle.getScoreboardActions().read(0);
+-	}
+-
+-	public void setScoreboardAction(ScoreboardAction value) {
+-		handle.getScoreboardActions().write(0, value);
+-	}
+-
+-}
+\ No newline at end of file
+Index: src/main/java/net/gitcoder/api/java/packet/Packet.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/Packet.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/Packet.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
+@@ -1,9 +0,0 @@
+-package net.gitcoder.api.java.packet;
+-
+-/**
+- * Developed by James_TheMan.
+- * You may not change this code or change copyright.
+- * The author is responsible for this code.
+- */
+-public class Packet {
+-}
+Index: src/main/java/net/gitcoder/api/java/utility/MojangUtil.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/utility/MojangUtil.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/utility/MojangUtil.java	(date 1564757845825)
+@@ -1,4 +1,4 @@
+-package net.gitcoder.api.java.utility;
++package net.gitcoder.api.bukkit.utility;
+ 
+ import com.google.gson.JsonObject;
+ import com.google.gson.JsonParser;
+Index: src/main/java/net/gitcoder/api/java/utility/StringUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.utility;\r\n\r\nimport com.google.common.collect.Maps;\r\nimport lombok.NonNull;\r\nimport lombok.experimental.UtilityClass;\r\nimport org.bukkit.util.ChatPaginator;\r\n\r\nimport java.util.Calendar;\r\nimport java.util.GregorianCalendar;\r\nimport java.util.Map;\r\nimport java.util.Random;\r\nimport java.util.function.Function;\r\nimport java.util.regex.Matcher;\r\nimport java.util.regex.Pattern;\r\n\r\n/**\r\n * @Author GitCoder.\r\n * <p>\r\n * The code is developed by the developer GitCoder.\r\n * You cannot change this code or interact with it in any way.\r\n * <p>\r\n * All right's is reserved.\r\n */\r\n@UtilityClass\r\npublic class StringUtil {\r\n\r\n    static int charCount(String input) {\r\n        return countCharacters(input).get(org.bukkit.ChatColor.COLOR_CHAR);\r\n    }\r\n\r\n    private Map<Character, Integer> countCharacters(String input) {\r\n        Map<Character, Integer> map = Maps.newHashMap();\r\n        for(int i = 0; i < input.length(); i++) {\r\n            map.merge(input.charAt(i), 1, Integer::sum);\r\n        }\r\n        return map;\r\n    }\r\n\r\n    public String getParsedTime(int time) {\r\n        int minutes = time / 60;\r\n        int seconds = time - minutes * 60;\r\n\r\n        String m = String.valueOf(minutes);\r\n        String s = String.valueOf(seconds);\r\n        if (m.length() == 1) {\r\n            m = \"0\" + m;\r\n        }\r\n        if (s.length() == 1) {\r\n            s = \"0\" + s;\r\n        }\r\n        String color = \"\";\r\n        return color + m + \":\" + s;\r\n    }\r\n\r\n\r\n    public String formatTime(long ms, String one, String two, String three) {\r\n        if (ms % 100L > 10L && ms % 100L < 15L) {\r\n            return ms + three;\r\n        } else {\r\n            switch ((int) (ms % 10L)) {\r\n                case 1:\r\n                    return ms + one;\r\n                case 2:\r\n                case 3:\r\n                case 4:\r\n                    return ms + two;\r\n                default:\r\n                    return ms + three;\r\n            }\r\n        }\r\n    }\r\n\r\n    public String formatTime(long ms, FormatTimeUtil formatTimeUtil) {\r\n        if (ms % 100L > 10L && ms % 100L < 15L) {\r\n            return ms + formatTimeUtil.three;\r\n        } else {\r\n            switch ((int) (ms % 10L)) {\r\n                case 1:\r\n                    return ms + formatTimeUtil.one;\r\n                case 2:\r\n                case 3:\r\n                case 4:\r\n                    return ms + formatTimeUtil.two;\r\n                default:\r\n                    return ms + formatTimeUtil.three;\r\n            }\r\n        }\r\n    }\r\n\r\n    public String getTime(long ms) {\r\n        if (ms < 1000) return \"§c0\";\r\n\r\n        long s = ms / 1000;\r\n\r\n        long m = s / 60;\r\n        s %= 60;\r\n\r\n        long h = m / 60;\r\n        m %= 60;\r\n\r\n        long d = h / 24;\r\n        h %= 24;\r\n\r\n        long w = d / 7;\r\n        d %= 7;\r\n\r\n        long y = d / 365;\r\n        d %= 365;\r\n\r\n        StringBuilder builder = new StringBuilder();\r\n\r\n        if (w > 0) builder.append(formatTime(w, FormatTimeUtil.WEEK)).append(\" \");\r\n        if (d > 0) builder.append(formatTime(d, FormatTimeUtil.DAYS)).append(\" \");\r\n        if (h > 0) builder.append(formatTime(h, FormatTimeUtil.HOURS)).append(\" \");\r\n        if (m > 0) builder.append(formatTime(m, FormatTimeUtil.MINUTES)).append(\" \");\r\n        if (s > 0) builder.append(formatTime(s, FormatTimeUtil.SECONDS)).append(\" \");\r\n\r\n        return builder.toString();\r\n    }\r\n\r\n    public String getProgressBar(double curr, double mustHave) {\r\n        double tenPercent = (curr / mustHave) * 30;\r\n\r\n        double allPercent = (tenPercent / 30) * 100;\r\n\r\n        int percent = (int) Math.round(tenPercent);\r\n        int reached = (int) Math.round(allPercent);\r\n\r\n        String progressBar;\r\n        progressBar = org.apache.commons.lang.StringUtils.repeat(\"§3|\", percent);\r\n        progressBar += org.apache.commons.lang.StringUtils.repeat(\"§8|\", (30 - percent));\r\n        progressBar += \"     §e(\" + reached + \"%)\";\r\n\r\n        return progressBar;\r\n    }\r\n\r\n    public long parseDateDiff(String time, boolean future) throws Exception {\r\n        Pattern timePattern = Pattern.compile(\"(?:([0-9]+)\\\\s*y[a-z]*[,\\\\s]*)?(?:([0-9]+)\\\\s*mo[a-z]*[,\\\\s]*)?(?:([0-9]+)\\\\s*w[a-z]*[,\\\\s]*)?(?:([0-9]+)\\\\s*d[a-z]*[,\\\\s]*)?(?:([0-9]+)\\\\s*h[a-z]*[,\\\\s]*)?(?:([0-9]+)\\\\s*m[a-z]*[,\\\\s]*)?(?:([0-9]+)\\\\s*(?:s[a-z]*)?)?\", 2);\r\n        Matcher m = timePattern.matcher(time);\r\n        int years = 0;\r\n        int months = 0;\r\n        int weeks = 0;\r\n        int days = 0;\r\n        int hours = 0;\r\n        int minutes = 0;\r\n        int seconds = 0;\r\n        boolean found = false;\r\n\r\n        while(m.find()) {\r\n            if(m.group() != null && !m.group().isEmpty()) {\r\n                for(int c = 0; c < m.groupCount(); ++c) {\r\n                    if(m.group(c) != null && !m.group(c).isEmpty()) {\r\n                        found = true;\r\n                        break;\r\n                    }\r\n                }\r\n\r\n                if(found) {\r\n                    if(m.group(1) != null && !m.group(1).isEmpty()) {\r\n                        years = Integer.parseInt(m.group(1));\r\n                    }\r\n\r\n                    if(m.group(2) != null && !m.group(2).isEmpty()) {\r\n                        months = Integer.parseInt(m.group(2));\r\n                    }\r\n\r\n                    if(m.group(3) != null && !m.group(3).isEmpty()) {\r\n                        weeks = Integer.parseInt(m.group(3));\r\n                    }\r\n\r\n                    if(m.group(4) != null && !m.group(4).isEmpty()) {\r\n                        days = Integer.parseInt(m.group(4));\r\n                    }\r\n\r\n                    if(m.group(5) != null && !m.group(5).isEmpty()) {\r\n                        hours = Integer.parseInt(m.group(5));\r\n                    }\r\n\r\n                    if(m.group(6) != null && !m.group(6).isEmpty()) {\r\n                        minutes = Integer.parseInt(m.group(6));\r\n                    }\r\n\r\n                    if(m.group(7) != null && !m.group(7).isEmpty()) {\r\n                        seconds = Integer.parseInt(m.group(7));\r\n                    }\r\n                    break;\r\n                }\r\n            }\r\n        }\r\n\r\n        if(!found) {\r\n            throw new Exception(\"Illegal Date\");\r\n        } else if(years > 20) {\r\n            throw new Exception(\"Illegal Date\");\r\n        } else {\r\n            GregorianCalendar var13 = new GregorianCalendar();\r\n            if(years > 0) {\r\n                var13.add(Calendar.YEAR, years * (future?1:-1));\r\n            }\r\n\r\n            if(months > 0) {\r\n                var13.add(Calendar.MONTH, months * (future?1:-1));\r\n            }\r\n\r\n            if(weeks > 0) {\r\n                var13.add(Calendar.WEEK_OF_YEAR, weeks * (future?1:-1));\r\n            }\r\n\r\n            if(days > 0) {\r\n                var13.add(Calendar.DATE, days * (future?1:-1));\r\n            }\r\n\r\n            if(hours > 0) {\r\n                var13.add(Calendar.HOUR_OF_DAY, hours * (future?1:-1));\r\n            }\r\n\r\n            if(minutes > 0) {\r\n                var13.add(Calendar.MINUTE, minutes * (future?1:-1));\r\n            }\r\n\r\n            if(seconds > 0) {\r\n                var13.add(Calendar.SECOND, seconds * (future?1:-1));\r\n            }\r\n\r\n            return var13.getTimeInMillis() / 1000L;\r\n        }\r\n    }\r\n\r\n    public String leftTime(long unixTime) {\r\n        long seconds;\r\n        seconds = unixTime - System.currentTimeMillis() / 1000L;\r\n\r\n\r\n        long minutes = 0L;\r\n        long hours = 0L;\r\n        long days = 0L;\r\n        long i;\r\n        if(seconds >= 60L) {\r\n            i = (long)((int)(seconds / 60L));\r\n            minutes = i;\r\n            seconds %= 60L;\r\n        }\r\n\r\n        if(minutes >= 60L) {\r\n            i = (long)((int)(minutes / 60L));\r\n            hours = i;\r\n            minutes %= 60L;\r\n        }\r\n\r\n        if(hours >= 24L) {\r\n            i = (long)((int)(hours / 24L));\r\n            days = i;\r\n            hours %= 24L;\r\n        }\r\n\r\n        String s = \"\";\r\n        String msg;\r\n        if(days > 0L) {\r\n            msg = formatTime(days, \"д\", \"ень\", \"ня\", \"ней\");\r\n            s = s + days + \" \" + msg + \" \";\r\n        }\r\n\r\n        if(hours > 0L) {\r\n            msg = formatTime(hours, \"час\", \"\", \"а\", \"ов\");\r\n            s = s + hours + \" \" + msg + \" \";\r\n        }\r\n\r\n        if(minutes > 0L) {\r\n            msg = formatTime(minutes, \"минут\", \"а\", \"ы\", \"\");\r\n            s = s + minutes + \" \" + msg + \" \";\r\n        }\r\n\r\n        if(seconds > 0L) {\r\n            msg = formatTime(seconds, \"секунд\", \"а\", \"ы\", \"\");\r\n            s = s + seconds + \" \" + msg + \" \";\r\n        }\r\n\r\n        return s;\r\n    }\r\n\r\n    private String formatTime(long num, String main, String single, String lessfive, String others) {\r\n        int end = (int)(num % 10L);\r\n        if(num % 100L <= 10L || num % 100L >= 15L) {\r\n            switch(end) {\r\n                case 1:\r\n                    return main + single;\r\n                case 2:\r\n                case 3:\r\n                case 4:\r\n                    return main + lessfive;\r\n            }\r\n        }\r\n\r\n        return main + others;\r\n    }\r\n\r\n\r\n    public boolean isInteger(String string) {\r\n        try {\r\n            Integer.parseInt(string);\r\n            return true;\r\n        } catch (Exception ex) {\r\n            return false;\r\n        }\r\n    }\r\n\r\n\r\n    public String centeredMessage(String message) {\r\n        return org.apache.commons.lang.StringUtils.center(message, ChatPaginator.AVERAGE_CHAT_PAGE_WIDTH);\r\n    }\r\n\r\n    private final Pattern SPECIAL_PATTERN_MATCH = Pattern.compile(\"(@)\");\r\n\r\n    public String colorizeString(@NonNull String pattern, @NonNull String... colors) {\r\n        if (colors.length == 0) return SPECIAL_PATTERN_MATCH.matcher(pattern).replaceAll(\"\");\r\n\r\n        return applyPattern(pattern, new Function<String, String>() {\r\n            int index = -1;\r\n\r\n            @Override\r\n            public String apply(String s) {\r\n                if (index++ >= colors.length) return null;\r\n                return colors[index];\r\n            }\r\n        });\r\n\r\n    }\r\n\r\n    private String applyPattern(String pattern, Function<String, String> function) {\r\n        Matcher matcher = SPECIAL_PATTERN_MATCH.matcher(pattern);\r\n        StringBuffer output = new StringBuffer();\r\n\r\n        while (matcher.find()) {\r\n            String s = function.apply(matcher.group());\r\n            if (s == null || s.isEmpty()) break;\r\n            matcher.appendReplacement(output, s);\r\n        }\r\n        matcher.appendTail(output);\r\n\r\n\r\n        return output.toString();\r\n    }\r\n\r\n\r\n    public String randomString(int length) {\r\n        String AB = \"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\";\r\n        Random rnd = new Random();\r\n\r\n        StringBuilder sb = new StringBuilder(length);\r\n        for (int i = 0; i < length; i++)\r\n            sb.append(AB.charAt(rnd.nextInt(AB.length())));\r\n        return sb.toString();\r\n    }\r\n\r\n    public String getPattern(@NonNull String string, @NonNull int... positions) {\r\n        StringBuilder sb = new StringBuilder(string);\r\n        for (int position : positions) {\r\n            sb.insert(position + 1, \"@\");\r\n        }\r\n        return sb.toString();\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/utility/StringUtil.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/utility/StringUtil.java	(date 1564757845447)
+@@ -24,7 +24,7 @@
+ @UtilityClass
+ public class StringUtil {
+ 
+-    static int charCount(String input) {
++    public static int charCount(String input) {
+         return countCharacters(input).get(org.bukkit.ChatColor.COLOR_CHAR);
+     }
+ 
+@@ -70,7 +70,7 @@
+         }
+     }
+ 
+-    public String formatTime(long ms, FormatTimeUtil formatTimeUtil) {
++    public String formatTime(long ms, FormatTime formatTimeUtil) {
+         if (ms % 100L > 10L && ms % 100L < 15L) {
+             return ms + formatTimeUtil.three;
+         } else {
+@@ -109,11 +109,11 @@
+ 
+         StringBuilder builder = new StringBuilder();
+ 
+-        if (w > 0) builder.append(formatTime(w, FormatTimeUtil.WEEK)).append(" ");
+-        if (d > 0) builder.append(formatTime(d, FormatTimeUtil.DAYS)).append(" ");
+-        if (h > 0) builder.append(formatTime(h, FormatTimeUtil.HOURS)).append(" ");
+-        if (m > 0) builder.append(formatTime(m, FormatTimeUtil.MINUTES)).append(" ");
+-        if (s > 0) builder.append(formatTime(s, FormatTimeUtil.SECONDS)).append(" ");
++        if (w > 0) builder.append(formatTime(w, FormatTime.WEEK)).append(" ");
++        if (d > 0) builder.append(formatTime(d, FormatTime.DAYS)).append(" ");
++        if (h > 0) builder.append(formatTime(h, FormatTime.HOURS)).append(" ");
++        if (m > 0) builder.append(formatTime(m, FormatTime.MINUTES)).append(" ");
++        if (s > 0) builder.append(formatTime(s, FormatTime.SECONDS)).append(" ");
+ 
+         return builder.toString();
+     }
+Index: src/main/java/net/gitcoder/api/bukkit/module/entity/impl/FakePlayer.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.module.entity.impl;\r\n\r\nimport com.comphenix.protocol.wrappers.*;\r\nimport lombok.Getter;\r\nimport net.gitcoder.api.bukkit.module.entity.FakeEntity;\r\nimport net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerNamedEntitySpawn;\r\nimport net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerPlayerInfo;\r\nimport net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;\r\nimport net.gitcoder.api.java.utility.MojangUtil;\r\nimport org.bukkit.ChatColor;\r\nimport org.bukkit.Location;\r\nimport org.bukkit.entity.EntityType;\r\nimport org.bukkit.entity.Player;\r\n\r\nimport java.util.Collections;\r\nimport java.util.UUID;\r\nimport java.util.concurrent.ThreadLocalRandom;\r\n\r\n@Getter\r\npublic class FakePlayer extends FakeEntity {\r\n\r\n    private static final ThreadLocalRandom RANDOM = ThreadLocalRandom.current();\r\n\r\n    private final UUID uuid;\r\n    private final MojangUtil.Skin skin;\r\n\r\n    private final String name;\r\n\r\n    public FakePlayer(String skin, Location location) {\r\n        super(EntityType.PLAYER, location);\r\n\r\n        this.name = \"§8NPC [\" + RANDOM.nextInt(999999) + \"]\";\r\n        this.uuid = UUID.randomUUID();\r\n        this.skin = MojangUtil.getSkinTextures(skin);\r\n    }\r\n\r\n    @Override\r\n    public void sendSpawnPacket(Player player) {\r\n        String teamName = getTeamName();\r\n\r\n        sendTeamPacket(teamName, player, WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);\r\n        sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction.ADD_PLAYER, player);\r\n\r\n        WrapperPlayServerNamedEntitySpawn spawned = new WrapperPlayServerNamedEntitySpawn();\r\n\r\n        spawned.setEntityID(getId());\r\n        spawned.setPosition(getLocation().toVector());\r\n        spawned.setPlayerUUID(uuid);\r\n\r\n        spawned.setPitch(getLocation().getPitch());\r\n        spawned.setYaw(getLocation().getYaw());\r\n\r\n        spawned.sendPacket(player);\r\n\r\n        sendEntityLookPacket(player);\r\n        sendHeadRotationPacket(player);\r\n\r\n        sendTeamPacket(teamName, player, WrapperPlayServerScoreboardTeam.Mode.PLAYERS_ADDED);\r\n    }\r\n\r\n    private void sendPlayerInfoPacket(EnumWrappers.PlayerInfoAction action, Player player) {\r\n        WrapperPlayServerPlayerInfo playerInfoPacket = new WrapperPlayServerPlayerInfo();\r\n\r\n        WrappedGameProfile wrappedGameProfile = new WrappedGameProfile(uuid, name);\r\n\r\n        if (skin != null && action == EnumWrappers.PlayerInfoAction.ADD_PLAYER) {\r\n            wrappedGameProfile.getProperties().put(\"textures\", new WrappedSignedProperty(\"textures\",\r\n                    skin.getValue(), skin.getSignature()));\r\n        }\r\n\r\n        PlayerInfoData playerInfoData = new PlayerInfoData(wrappedGameProfile, 0,\r\n                EnumWrappers.NativeGameMode.ADVENTURE, WrappedChatComponent.fromText(name));\r\n\r\n        playerInfoPacket.setAction(action);\r\n        playerInfoPacket.setData(Collections.singletonList(playerInfoData));\r\n\r\n        playerInfoPacket.sendPacket(player);\r\n    }\r\n\r\n    private void sendTeamPacket(String teamName, Player player, int mode) {\r\n        WrapperPlayServerScoreboardTeam scoreboardTeam = new WrapperPlayServerScoreboardTeam();\r\n\r\n        scoreboardTeam.setName(teamName);\r\n        scoreboardTeam.setMode(mode);\r\n\r\n        if (mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED || mode == WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED) {\r\n            scoreboardTeam.setDisplayName(teamName);\r\n            scoreboardTeam.setPrefix(getGlowingColor() == null ? \"§8\" : getGlowingColor().toString());\r\n            scoreboardTeam.setCollisionRule(\"never\");\r\n            scoreboardTeam.setNameTagVisibility(\"never\");\r\n            scoreboardTeam.setPackOptionData(0);\r\n            scoreboardTeam.setColor(0);\r\n        } else {\r\n            scoreboardTeam.setPlayers(Collections.singletonList(name));\r\n        }\r\n\r\n        scoreboardTeam.sendPacket(player);\r\n    }\r\n\r\n    @Override\r\n    public void setGlowingColor(ChatColor glowingColor) {\r\n        super.setGlowingColor(glowingColor);\r\n\r\n        getReceivers().forEach(receiver -> sendTeamPacket(getTeamName(), receiver, WrapperPlayServerScoreboardTeam.Mode.TEAM_UPDATED));\r\n    }\r\n\r\n    private String getTeamName() {\r\n        String teamName = name + \"_TEAM\";\r\n\r\n        if (teamName.length() > 16) {\r\n            teamName = teamName.substring(0, 16);\r\n        }\r\n\r\n        return teamName;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/module/entity/impl/FakePlayer.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/module/entity/impl/FakePlayer.java	(date 1564757846043)
+@@ -6,7 +6,7 @@
+ import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerNamedEntitySpawn;
+ import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerPlayerInfo;
+ import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;
+-import net.gitcoder.api.java.utility.MojangUtil;
++import net.gitcoder.api.bukkit.utility.MojangUtil;
+ import org.bukkit.ChatColor;
+ import org.bukkit.Location;
+ import org.bukkit.entity.EntityType;
+Index: src/main/java/net/gitcoder/api/java/packet/packetwrapper/AbstractPacket.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/packetwrapper/AbstractPacket.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/AbstractPacket.java	(date 1564757845401)
+@@ -1,4 +1,4 @@
+-package net.gitcoder.api.java.packet.packetwrapper;
++package net.gitcoder.api.java.packet;
+ 
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.ProtocolLibrary;
+Index: src/main/java/net/gitcoder/api/bukkit/game/setting/GameSetting.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.game.setting;\r\n\r\nimport net.gitcoder.api.bukkit.game.type.GameType;\r\nimport net.gitcoder.api.java.utility.ItemUtil;\r\nimport org.bukkit.Material;\r\nimport org.bukkit.inventory.ItemStack;\r\n\r\n/**\r\n * @Author GitCoder.\r\n * <p>\r\n * The code is developed by the developer GitCoder.\r\n * You cannot change this code or interact with it in any way.\r\n * <p>\r\n * All right's is reserved.\r\n */\r\n@SuppressWarnings(\"all\")\r\npublic class GameSetting {\r\n\r\n    public GameType GAME_TYPE;\r\n\r\n    public final ItemStack EXIT_ITEM;\r\n    public final ItemStack SHOP_ITEM;\r\n    public final ItemStack SPECTATOR_MENU_ITEM;\r\n    public final ItemStack SPECTATOR_SETTING_ITEM;\r\n\r\n    public int MAX_PLAYERS_COUNT;\r\n    public int MAX_PLAYERS_IN_TEAM;\r\n\r\n    /**\r\n     * Конструктор, создавающий стандартные настройки.\r\n     */\r\n    public GameSetting() {\r\n        this.EXIT_ITEM = ItemUtil.newBuilder(Material.SLIME_BALL).setName(\"§6Выход в лобби\").create();\r\n        this.SHOP_ITEM = ItemUtil.newBuilder(Material.CHEST).setName(\"§6Магазин с перками и китами\").create();\r\n        this.SPECTATOR_MENU_ITEM = ItemUtil.newBuilder(Material.COMPASS).setName(\"§6Локатор игроков\").create();\r\n        this.SPECTATOR_SETTING_ITEM = ItemUtil.newBuilder(Material.REDSTONE_COMPARATOR_ON).setName(\"§6Настройки наблюдателя\").create();\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/game/setting/GameSetting.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/game/setting/GameSetting.java	(date 1564757845725)
+@@ -1,7 +1,7 @@
+ package net.gitcoder.api.bukkit.game.setting;
+ 
+ import net.gitcoder.api.bukkit.game.type.GameType;
+-import net.gitcoder.api.java.utility.ItemUtil;
++import net.gitcoder.api.bukkit.utility.ItemUtil;
+ import org.bukkit.Material;
+ import org.bukkit.inventory.ItemStack;
+ 
+Index: src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardTeam.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.scoreboard;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.reflect.IntEnum;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\n\r\nimport java.util.Collection;\r\nimport java.util.List;\r\n\r\npublic class WrapperPlayServerScoreboardTeam extends AbstractPacket {\r\n\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.SCOREBOARD_TEAM;\r\n\r\n\tpublic WrapperPlayServerScoreboardTeam() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerScoreboardTeam(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Enum containing all known modes.\r\n\t *\r\n\t * @author dmulloy2\r\n\t */\r\n\tpublic static class Mode extends IntEnum {\r\n\t\tpublic static final int TEAM_CREATED = 0;\r\n\t\tpublic static final int TEAM_REMOVED = 1;\r\n\t\tpublic static final int TEAM_UPDATED = 2;\r\n\t\tpublic static final int PLAYERS_ADDED = 3;\r\n\t\tpublic static final int PLAYERS_REMOVED = 4;\r\n\r\n\t\tprivate static final Mode INSTANCE = new Mode();\r\n\r\n\t\tpublic static Mode getInstance() {\r\n\t\t\treturn INSTANCE;\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Team Name.\r\n\t * <p>\r\n\t * Notes: a unique name for the team. (Shared with scoreboard).\r\n\t *\r\n\t * @return The current Team Name\r\n\t */\r\n\tpublic String getName() {\r\n\t\treturn handle.getStrings().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Team Name.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setName(String value) {\r\n\t\thandle.getStrings().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Team Display Name.\r\n\t * <p>\r\n\t * Notes: only if Mode = 0 or 2.\r\n\t *\r\n\t * @return The current Team Display Name\r\n\t */\r\n\tpublic String getDisplayName() {\r\n\t\treturn handle.getStrings().read(1);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Team Display Name.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setDisplayName(String value) {\r\n\t\thandle.getStrings().write(1, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Team Prefix.\r\n\t * <p>\r\n\t * Notes: only if Mode = 0 or 2. Displayed before the players' name that are\r\n\t * part of this team.\r\n\t *\r\n\t * @return The current Team Prefix\r\n\t */\r\n\tpublic String getPrefix() {\r\n\t\treturn handle.getStrings().read(2);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Team Prefix.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setPrefix(String value) {\r\n\t\thandle.getStrings().write(2, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Team Suffix.\r\n\t * <p>\r\n\t * Notes: only if Mode = 0 or 2. Displayed after the players' name that are\r\n\t * part of this team.\r\n\t *\r\n\t * @return The current Team Suffix\r\n\t */\r\n\tpublic String getSuffix() {\r\n\t\treturn handle.getStrings().read(3);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Team Suffix.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setSuffix(String value) {\r\n\t\thandle.getStrings().write(3, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Name Tag Visibility.\r\n\t * <p>\r\n\t * Notes: only if Mode = 0 or 2. always, hideForOtherTeams, hideForOwnTeam,\r\n\t * never.\r\n\t *\r\n\t * @return The current Name Tag Visibility\r\n\t */\r\n\tpublic String getNameTagVisibility() {\r\n\t\treturn handle.getStrings().read(4);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Name Tag Visibility.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setNameTagVisibility(String value) {\r\n\t\thandle.getStrings().write(4, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Color.\r\n\t * <p>\r\n\t * Notes: only if Mode = 0 or 2. Same as Chat colors.\r\n\t *\r\n\t * @return The current Color\r\n\t */\r\n\tpublic int getColor() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Color.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setColor(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Get the collision rule.\r\n\t * Notes: only if Mode = 0 or 2. always, pushOtherTeams, pushOwnTeam, never.\r\n\t * @return The current collision rule\r\n\t */\r\n\tpublic String getCollisionRule() {\r\n\t\treturn handle.getStrings().read(5);\r\n\t}\r\n\r\n\t/**\r\n\t * Sets the collision rule.\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setCollisionRule(String value) {\r\n\t\thandle.getStrings().write(5, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Players.\r\n\t * <p>\r\n\t * Notes: only if Mode = 0 or 3 or 4. Players to be added/remove from the\r\n\t * team. Max 40 characters so may be uuid's later\r\n\t *\r\n\t * @return The current Players\r\n\t */\r\n\t@SuppressWarnings(\"unchecked\")\r\n\tpublic List<String> getPlayers() {\r\n\t\treturn (List<String>) handle.getSpecificModifier(Collection.class)\r\n\t\t\t\t.read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Players.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setPlayers(List<String> value) {\r\n\t\thandle.getSpecificModifier(Collection.class).write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Mode.\r\n\t * <p>\r\n\t * Notes: if 0 then the team is created. If 1 then the team is removed. If 2\r\n\t * the team team information is updated. If 3 then new players are added to\r\n\t * the team. If 4 then players are removed from the team.\r\n\t *\r\n\t * @return The current Mode\r\n\t */\r\n\tpublic int getMode() {\r\n\t\treturn handle.getIntegers().read(1);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Mode.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setMode(int value) {\r\n\t\thandle.getIntegers().write(1, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve pack option data. Pack data is calculated as follows:\r\n\t *\r\n\t * <pre>\r\n\t * <code>\r\n\t * int data = 0;\r\n\t * if (team.allowFriendlyFire()) {\r\n\t *     data |= 1;\r\n\t * }\r\n\t * if (team.canSeeFriendlyInvisibles()) {\r\n\t *     data |= 2;\r\n\t * }\r\n\t * </code>\r\n\t * </pre>\r\n\t *\r\n\t * @return The current pack option data\r\n\t */\r\n\tpublic int getPackOptionData() {\r\n\t\treturn handle.getIntegers().read(2);\r\n\t}\r\n\r\n\t/**\r\n\t * Set pack option data.\r\n\t *\r\n\t * @param value - new value\r\n\t * @see #getPackOptionData()\r\n\t */\r\n\tpublic void setPackOptionData(int value) {\r\n\t\thandle.getIntegers().write(2, value);\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardTeam.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardTeam.java	(date 1564757846292)
+@@ -3,7 +3,7 @@
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.reflect.IntEnum;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ 
+ import java.util.Collection;
+ import java.util.List;
+Index: src/main/java/net/gitcoder/api/bukkit/module/board/line/BoardLine.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.module.board.line;\r\n\r\nimport com.google.common.base.Splitter;\r\nimport net.gitcoder.api.bukkit.module.board.Board;\r\nimport net.gitcoder.api.java.utility.ColorUtil;\r\nimport org.bukkit.ChatColor;\r\nimport org.bukkit.scoreboard.DisplaySlot;\r\nimport org.bukkit.scoreboard.Team;\r\n\r\nimport java.util.Iterator;\r\n\r\n/**\r\n * @Author GitCoder.\r\n * <p>\r\n * The code is developed by the developer GitCoder.\r\n * You cannot change this code or interact with it in any way.\r\n * <p>\r\n * All right's is reserved.\r\n */\r\npublic class BoardLine {\r\n\r\n    private final Board board;\r\n    private final int index;\r\n    private String text;\r\n    private Team team;\r\n\r\n    /**\r\n     * Конструктор, создаёт новую линию для борда.\r\n     * @param board - борд.\r\n     * @param index - индекс.\r\n     * @param text - текст.\r\n     */\r\n    public BoardLine(Board board,\r\n                     int index,\r\n                     String text) {\r\n\r\n        this.board = board;\r\n        this.index = index;\r\n        this.text = ColorUtil.replaceColors(text.isEmpty() ? ChatColor.values()[index].toString() : text);\r\n        this.team = board.getScoreboard().registerNewTeam(index + \"\");\r\n        prepareText();\r\n    }\r\n\r\n    /**\r\n     * Установка текста для линии и его форматирование.\r\n     * @param text - текст.\r\n     */\r\n    public void setText(String text) {\r\n        this.text = ColorUtil.replaceColors(text.isEmpty() ? ChatColor.values()[index].toString() : text);\r\n        prepareText();\r\n    }\r\n\r\n    /**\r\n     * Подготовка текста.\r\n     */\r\n    private void prepareText() {\r\n        if (isModifiable()) {\r\n            return;\r\n        }\r\n        Iterator<String> iterator = Splitter.fixedLength(16).split(text).iterator();\r\n        String prefix = iterator.next();\r\n        String result = ChatColor.values()[index].toString();\r\n\r\n        team.setPrefix(prefix);\r\n\r\n        team.removeEntry(result);\r\n\r\n        team.addEntry(result);\r\n\r\n        if (text.length() > 16) {\r\n            String prefixColor = ChatColor.getLastColors(prefix);\r\n            String suffix = iterator.next();\r\n\r\n            if (prefix.endsWith(String.valueOf(ChatColor.COLOR_CHAR))) {\r\n                prefix = prefix.substring(0, prefix.length() - 1);\r\n                team.setPrefix(prefix);\r\n                prefixColor = ChatColor.getByChar(suffix.charAt(0)).toString();\r\n                suffix = suffix.substring(1);\r\n            }\r\n\r\n            if (prefixColor == null)\r\n                prefixColor = \"\";\r\n\r\n            if (suffix.length() > 16) {\r\n                suffix = suffix.substring(0, (13 - prefixColor.length()));\r\n            }\r\n\r\n            team.setSuffix((prefixColor.equals(\"\") ? ChatColor.RESET : prefixColor) + suffix);\r\n\r\n        } else team.setSuffix(ChatColor.RESET.toString());\r\n\r\n        board.getObjective().getScore(result).setScore(index);\r\n    }\r\n\r\n    /**\r\n     * ??\r\n     * @return true or false\r\n     */\r\n    private boolean isModifiable() {\r\n        return board.getScoreboard().getObjective(DisplaySlot.SIDEBAR) == null\r\n                || board.getScoreboard().getTeam(index + \"\") == null;\r\n    }\r\n\r\n    /**\r\n     * Скрыть линию в борде.\r\n     */\r\n    public void hide() {\r\n        this.board.getScoreboard().resetScores(ChatColor.values()[index].toString());\r\n        this.team.unregister();\r\n    }\r\n\r\n    /**\r\n     * Показать линию в борде.\r\n     */\r\n    public void show() {\r\n        this.team = board.getScoreboard().registerNewTeam(index + \"\");\r\n        prepareText();\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/module/board/line/BoardLine.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/module/board/line/BoardLine.java	(date 1564757845353)
+@@ -2,7 +2,7 @@
+ 
+ import com.google.common.base.Splitter;
+ import net.gitcoder.api.bukkit.module.board.Board;
+-import net.gitcoder.api.java.utility.ColorUtil;
++import net.gitcoder.api.bukkit.utility.ColorUtil;
+ import org.bukkit.ChatColor;
+ import org.bukkit.scoreboard.DisplaySlot;
+ import org.bukkit.scoreboard.Team;
+Index: src/main/java/net/gitcoder/api/bukkit/game/perk/GamePerk.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.game.perk;\r\n\r\nimport lombok.Getter;\r\nimport net.gitcoder.api.bukkit.GitAPI;\r\nimport net.gitcoder.api.bukkit.Management;\r\nimport net.gitcoder.api.bukkit.game.type.GameType;\r\nimport net.gitcoder.api.bukkit.gamer.humans.Gamer;\r\nimport org.bukkit.entity.Player;\r\nimport org.bukkit.event.Listener;\r\nimport org.bukkit.inventory.ItemStack;\r\n\r\n/**\r\n * @Author GitCoder.\r\n * <p>\r\n * The code is developed by the developer GitCoder.\r\n * You cannot change this code or interact with it in any way.\r\n * <p>\r\n * All right's is reserved.\r\n */\r\n\r\n@Getter\r\npublic abstract class GamePerk implements Listener {\r\n\r\n    private final String perkName, displayPerkName;\r\n\r\n    private final ItemStack displayItem;\r\n\r\n    private final int cost, level;\r\n\r\n    /**\r\n     * Конструктор, создавающий новый перк.\r\n     *\r\n     * @param perkName          - (имя перка. (Для миски, кора, и т.д))\r\n     * @param displayPerkName   - (Дисплей имя перка)\r\n     * @param cost              - (Цена, для игроков, для донатеров)\r\n     * @param level             - (Уровень группы, для которой перк бесплатный)\r\n     */\r\n    public GamePerk(String perkName,\r\n                    String displayPerkName,\r\n                    ItemStack displayItem,\r\n\r\n                    int cost,\r\n                    int level) {\r\n\r\n        this.perkName = perkName;\r\n        this.displayPerkName = displayPerkName;\r\n\r\n        this.displayItem = displayItem;\r\n\r\n        this.cost = cost;\r\n        this.level = level;\r\n\r\n        GitAPI.getPlugin(GitAPI.class).MANAGEMENT.PERK_MANAGER.createPerk(this);\r\n    }\r\n\r\n    /**\r\n     * Активация перка.\r\n     *\r\n     * @param player - игрок.\r\n     */\r\n    protected void onUse(Player player) {\r\n\r\n    }\r\n\r\n    /**\r\n     * Активая перка.\r\n     *\r\n     * @param gamer - геймер.\r\n     */\r\n    protected void onUse(Gamer gamer) {\r\n\r\n    }\r\n\r\n    /**\r\n     * Установка перка игроку.\r\n     *\r\n     * @param gamer - геймер.\r\n     */\r\n    public void selectPerk(Gamer gamer) {\r\n        gamer.setPerk(this);\r\n    }\r\n\r\n    /**\r\n     * Проверка есть ли у игрока перк.\r\n     *\r\n     * @return - true or false.\r\n     */\r\n    public boolean hasPerk(Gamer gamer) {\r\n        return gamer.hasPerk(this);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/game/perk/GamePerk.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/game/perk/GamePerk.java	(date 1564757845781)
+@@ -2,8 +2,6 @@
+ 
+ import lombok.Getter;
+ import net.gitcoder.api.bukkit.GitAPI;
+-import net.gitcoder.api.bukkit.Management;
+-import net.gitcoder.api.bukkit.game.type.GameType;
+ import net.gitcoder.api.bukkit.gamer.humans.Gamer;
+ import org.bukkit.entity.Player;
+ import org.bukkit.event.Listener;
+@@ -50,7 +48,7 @@
+         this.cost = cost;
+         this.level = level;
+ 
+-        GitAPI.getPlugin(GitAPI.class).MANAGEMENT.PERK_MANAGER.createPerk(this);
++        GitAPI.MANAGEMENT.PERK_MANAGER.createPerk(this);
+     }
+ 
+     /**
+@@ -58,18 +56,14 @@
+      *
+      * @param player - игрок.
+      */
+-    protected void onUse(Player player) {
+-
+-    }
++    protected void onUse(Player player) { }
+ 
+     /**
+      * Активая перка.
+      *
+      * @param gamer - геймер.
+      */
+-    protected void onUse(Gamer gamer) {
+-
+-    }
++    protected void onUse(Gamer gamer) { }
+ 
+     /**
+      * Установка перка игроку.
+Index: src/main/java/net/gitcoder/api/bukkit/game/perk/PerkManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.game.perk;\r\n\r\nimport net.gitcoder.api.bukkit.GitAPI;\r\nimport org.bukkit.Bukkit;\r\n\r\nimport java.util.*;\r\n\r\n/**\r\n * @Author GitCoder.\r\n * <p>\r\n * The code is developed by the developer GitCoder.\r\n * You cannot change this code or interact with it in any way.\r\n * <p>\r\n * All right's is reserved.\r\n */\r\npublic class PerkManager {\r\n\r\n    private final Map<String, GamePerk> gamePerks = new HashMap<>();\r\n    private final GitAPI gitAPI = GitAPI.getPlugin(GitAPI.class);\r\n\r\n    /**\r\n     * Регистрация перков.\r\n     * @param gamePerk - игровой перк.\r\n     */\r\n    public void registerPerk(Class<? extends GamePerk> gamePerk) {\r\n\r\n        try {\r\n\r\n            GamePerk perk = gamePerk.newInstance();\r\n            Bukkit.getPluginManager().registerEvents(perk, gitAPI);\r\n\r\n        } catch (InstantiationException | IllegalAccessException e) {\r\n            e.printStackTrace();\r\n        }\r\n    }\r\n\r\n    /**\r\n     * Создание перка.\r\n     * @param gamePerk - игровой перк.\r\n     */\r\n    void createPerk(GamePerk gamePerk) {\r\n        gamePerks.put(gamePerk.getPerkName().toLowerCase(), gamePerk);\r\n    }\r\n\r\n    /**\r\n     * Получение всех перков по уровню.\r\n     * @param level - уровень.\r\n     * @return - коллекцию с группами.\r\n     */\r\n    public Collection<GamePerk> getPerksByLevel(int level) {\r\n        List<GamePerk> list = new ArrayList<>();\r\n\r\n        for (GamePerk gamePerk : gamePerks.values()) {\r\n            if (gamePerk.getLevel() == level) {\r\n                list.add(gamePerk);\r\n            }\r\n        }\r\n\r\n        return list;\r\n\r\n    }\r\n\r\n    /**\r\n     * Получение всех перков по цене.\r\n     * @param cost - цена.\r\n     * @return - коллекцию с группами.\r\n     */\r\n    public Collection<GamePerk> getPerkByCost(int cost) {\r\n        List<GamePerk> list = new ArrayList<>();\r\n\r\n        for (GamePerk gamePerk : gamePerks.values()) {\r\n            if (gamePerk.getCost() == cost) {\r\n                list.add(gamePerk);\r\n            }\r\n        }\r\n\r\n        return list;\r\n\r\n    }\r\n\r\n    /**\r\n     * Получение перка по имени.\r\n     * @param name - имя перка.\r\n     * @return - перк.\r\n     */\r\n    public GamePerk getPerkByName(String name) {\r\n        return gamePerks.get(name.toLowerCase());\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/game/perk/PerkManager.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/game/perk/PerkManager.java	(date 1564757846790)
+@@ -13,7 +13,7 @@
+  * <p>
+  * All right's is reserved.
+  */
+-public class PerkManager {
++public final class PerkManager {
+ 
+     private final Map<String, GamePerk> gamePerks = new HashMap<>();
+     private final GitAPI gitAPI = GitAPI.getPlugin(GitAPI.class);
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityDestroy.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\n\r\npublic class WrapperPlayServerEntityDestroy extends AbstractPacket {\r\n\tpublic static final PacketType TYPE = PacketType.Play.Server.ENTITY_DESTROY;\r\n\r\n\tpublic WrapperPlayServerEntityDestroy() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerEntityDestroy(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Count.\r\n\t * <p>\r\n\t * Notes: length of following array\r\n\t * \r\n\t * @return The current Count\r\n\t */\r\n\tpublic int getCount() {\r\n\t\treturn handle.getIntegerArrays().read(0).length;\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Entity IDs.\r\n\t * <p>\r\n\t * Notes: the list of entities of destroy\r\n\t * \r\n\t * @return The current Entity IDs\r\n\t */\r\n\tpublic int[] getEntityIDs() {\r\n\t\treturn handle.getIntegerArrays().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Entity IDs.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityIds(int[] value) {\r\n\t\thandle.getIntegerArrays().write(0, value);\r\n\t}\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityDestroy.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityDestroy.java	(date 1564757846249)
+@@ -2,7 +2,7 @@
+ 
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ 
+ public class WrapperPlayServerEntityDestroy extends AbstractPacket {
+ 	public static final PacketType TYPE = PacketType.Play.Server.ENTITY_DESTROY;
+Index: src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardScore.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.scoreboard;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.wrappers.EnumWrappers.ScoreboardAction;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\n\r\npublic class WrapperPlayServerScoreboardScore extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.SCOREBOARD_SCORE;\r\n\r\n\tpublic WrapperPlayServerScoreboardScore() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerScoreboardScore(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Score name.\r\n\t * <p>\r\n\t * Notes: the name of the score to be updated or removed.\r\n\t *\r\n\t * @return The current Score name\r\n\t */\r\n\tpublic String getScoreName() {\r\n\t\treturn handle.getStrings().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Score name.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setScoreName(String value) {\r\n\t\thandle.getStrings().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Objective Name.\r\n\t * <p>\r\n\t * Notes: the name of the objective the score belongs to.\r\n\t *\r\n\t * @return The current Objective Name\r\n\t */\r\n\tpublic String getObjectiveName() {\r\n\t\treturn handle.getStrings().read(1);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Objective Name.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setObjectiveName(String value) {\r\n\t\thandle.getStrings().write(1, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Value.\r\n\t * <p>\r\n\t * Notes: the score to be displayed next to the entry. Only sent when\r\n\t * Update/Remove does not equal 1.\r\n\t *\r\n\t * @return The current Value\r\n\t */\r\n\tpublic int getValue() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Value.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setValue(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\tpublic ScoreboardAction getAction() {\r\n\t\treturn handle.getScoreboardActions().read(0);\r\n\t}\r\n\r\n\tpublic void setScoreboardAction(ScoreboardAction value) {\r\n\t\thandle.getScoreboardActions().write(0, value);\r\n\t}\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardScore.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardScore.java	(date 1564757846427)
+@@ -3,7 +3,7 @@
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.wrappers.EnumWrappers.ScoreboardAction;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ 
+ public class WrapperPlayServerScoreboardScore extends AbstractPacket {
+ 	public static final PacketType TYPE =
+Index: src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardDisplayObjective.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.scoreboard;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\n\r\npublic class WrapperPlayServerScoreboardDisplayObjective extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.SCOREBOARD_DISPLAY_OBJECTIVE;\r\n\r\n\tpublic WrapperPlayServerScoreboardDisplayObjective() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerScoreboardDisplayObjective(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Position.\r\n\t * <p>\r\n\t * Notes: the position of the scoreboard. 0 = list, 1 = sidebar, 2 =\r\n\t * belowName.\r\n\t *\r\n\t * @return The current Position\r\n\t */\r\n\tpublic int getPosition() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Position.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setPosition(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Score Name.\r\n\t * <p>\r\n\t * Notes: the unique name for the scoreboard to be displayed.\r\n\t *\r\n\t * @return The current Score Name\r\n\t */\r\n\tpublic String getScoreName() {\r\n\t\treturn handle.getStrings().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Score Name.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setScoreName(String value) {\r\n\t\thandle.getStrings().write(0, value);\r\n\t}\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardDisplayObjective.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardDisplayObjective.java	(date 1564757846341)
+@@ -2,7 +2,7 @@
+ 
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ 
+ public class WrapperPlayServerScoreboardDisplayObjective extends AbstractPacket {
+ 	public static final PacketType TYPE =
+Index: src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardObjective.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.scoreboard;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.reflect.IntEnum;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\n\r\npublic class WrapperPlayServerScoreboardObjective extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.SCOREBOARD_OBJECTIVE;\r\n\r\n\tpublic WrapperPlayServerScoreboardObjective() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerScoreboardObjective(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Enum containing all known packet modes.\r\n\t *\r\n\t * @author dmulloy2\r\n\t */\r\n\tpublic static class Mode extends IntEnum {\r\n\t\tpublic static final int ADD_OBJECTIVE = 0;\r\n\t\tpublic static final int REMOVE_OBJECTIVE = 1;\r\n\t\tpublic static final int UPDATE_VALUE = 2;\r\n\r\n\t\tprivate static final Mode INSTANCE = new Mode();\r\n\r\n\t\tpublic static Mode getInstance() {\r\n\t\t\treturn INSTANCE;\r\n\t\t}\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Objective name.\r\n\t * <p>\r\n\t * Notes: an unique name for the objective\r\n\t *\r\n\t * @return The current Objective name\r\n\t */\r\n\tpublic String getName() {\r\n\t\treturn handle.getStrings().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Objective name.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setName(String value) {\r\n\t\thandle.getStrings().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Objective DisplayName.\r\n\t * <p>\r\n\t * Notes: only if mode is 0 or 2. The text to be displayed for the score.\r\n\t *\r\n\t * @return The current Objective value\r\n\t */\r\n\tpublic String getDisplayName() {\r\n\t\treturn handle.getStrings().read(1);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Objective DisplayName.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setDisplayName(String value) {\r\n\t\thandle.getStrings().write(1, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve health display.\r\n\t * <p>\r\n\t * Notes: Can be either INTEGER or HEARTS\r\n\t *\r\n\t * @return\r\n\t */\r\n\tpublic HealthDisplay getHealthDisplay() {\r\n\t\treturn handle.getEnumModifier(HealthDisplay.class, 2).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set health display.\r\n\t *\r\n\t * @param value - value\r\n\t * @see #getHealthDisplay()\r\n\t */\r\n\tpublic void setHealthDisplay(HealthDisplay value) {\r\n\t\thandle.getEnumModifier(HealthDisplay.class, 2).write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Mode.\r\n\t * <p>\r\n\t * Notes: 0 to create the scoreboard. 1 to remove the scoreboard. 2 to\r\n\t * update the display text.\r\n\t *\r\n\t * @return The current Mode\r\n\t */\r\n\tpublic int getMode() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Mode.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setMode(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\tpublic static enum HealthDisplay {\r\n\t\tINTEGER, HEARTS;\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardObjective.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/scoreboard/WrapperPlayServerScoreboardObjective.java	(date 1564757845577)
+@@ -3,7 +3,7 @@
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.reflect.IntEnum;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ 
+ public class WrapperPlayServerScoreboardObjective extends AbstractPacket {
+ 	public static final PacketType TYPE =
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerSpawnEntityLiving.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.ProtocolLibrary;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.events.PacketEvent;\r\nimport com.comphenix.protocol.injector.PacketConstructor;\r\nimport com.comphenix.protocol.wrappers.WrappedDataWatcher;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\nimport org.bukkit.World;\r\nimport org.bukkit.entity.Entity;\r\nimport org.bukkit.entity.EntityType;\r\n\r\nimport java.util.UUID;\r\n\r\npublic class WrapperPlayServerSpawnEntityLiving extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.SPAWN_ENTITY_LIVING;\r\n\r\n\tprivate static PacketConstructor entityConstructor;\r\n\r\n\tpublic WrapperPlayServerSpawnEntityLiving() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerSpawnEntityLiving(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\tpublic WrapperPlayServerSpawnEntityLiving(Entity entity) {\r\n\t\tsuper(fromEntity(entity), TYPE);\r\n\t}\r\n\r\n\t// Useful constructor\r\n\tprivate static PacketContainer fromEntity(Entity entity) {\r\n\t\tif (entityConstructor == null)\r\n\t\t\tentityConstructor =\r\n\t\t\t\t\tProtocolLibrary.getProtocolManager()\r\n\t\t\t\t\t\t\t.createPacketConstructor(TYPE, entity);\r\n\t\treturn entityConstructor.createPacket(entity);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve entity ID.\r\n\t * \r\n\t * @return The current EID\r\n\t */\r\n\tpublic int getEntityID() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity that will be spawned.\r\n\t * \r\n\t * @param world - the current world of the entity.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(World world) {\r\n\t\treturn handle.getEntityModifier(world).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity that will be spawned.\r\n\t * \r\n\t * @param event - the packet event.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(PacketEvent event) {\r\n\t\treturn getEntity(event.getPlayer().getWorld());\r\n\t}\r\n\r\n\tpublic UUID getUniqueId() {\r\n\t\treturn handle.getUUIDs().read(0);\r\n\t}\r\n\r\n\tpublic void setUniqueId(UUID value) {\r\n\t\thandle.getUUIDs().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Set entity ID.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityID(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the type of mob.\r\n\t * \r\n\t * @return The current Type\r\n\t */\r\n\t@SuppressWarnings(\"deprecation\")\r\n\tpublic EntityType getType() {\r\n\t\treturn EntityType.fromId(handle.getIntegers().read(1));\r\n\t}\r\n\r\n\t/**\r\n\t * Set the type of mob.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\t@SuppressWarnings(\"deprecation\")\r\n\tpublic void setType(EntityType value) {\r\n\t\thandle.getIntegers().write(1, (int) value.getTypeId());\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the x position of the object.\r\n\t * <p>\r\n\t * Note that the coordinate is rounded off to the nearest 1/32 of a meter.\r\n\t * \r\n\t * @return The current X\r\n\t */\r\n\tpublic double getX() {\r\n\t\treturn handle.getDoubles().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set the x position of the object.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setX(double value) {\r\n\t\thandle.getDoubles().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the y position of the object.\r\n\t * <p>\r\n\t * Note that the coordinate is rounded off to the nearest 1/32 of a meter.\r\n\t * \r\n\t * @return The current y\r\n\t */\r\n\tpublic double getY() {\r\n\t\treturn handle.getDoubles().read(1);\r\n\t}\r\n\r\n\t/**\r\n\t * Set the y position of the object.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setY(double value) {\r\n\t\thandle.getDoubles().write(1, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the z position of the object.\r\n\t * <p>\r\n\t * Note that the coordinate is rounded off to the nearest 1/32 of a meter.\r\n\t * \r\n\t * @return The current z\r\n\t */\r\n\tpublic double getZ() {\r\n\t\treturn handle.getDoubles().read(2);\r\n\t}\r\n\r\n\t/**\r\n\t * Set the z position of the object.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setZ(double value) {\r\n\t\thandle.getDoubles().write(2, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the yaw.\r\n\t * \r\n\t * @return The current Yaw\r\n\t */\r\n\tpublic float getYaw() {\r\n\t\treturn (handle.getBytes().read(0) * 360.F) / 256.0F;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the yaw of the spawned mob.\r\n\t * \r\n\t * @param value - new yaw.\r\n\t */\r\n\tpublic void setYaw(float value) {\r\n\t\thandle.getBytes().write(0, (byte) (value * 256.0F / 360.0F));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the pitch.\r\n\t * \r\n\t * @return The current pitch\r\n\t */\r\n\tpublic float getPitch() {\r\n\t\treturn (handle.getBytes().read(1) * 360.F) / 256.0F;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the pitch of the spawned mob.\r\n\t * \r\n\t * @param value - new pitch.\r\n\t */\r\n\tpublic void setPitch(float value) {\r\n\t\thandle.getBytes().write(1, (byte) (value * 256.0F / 360.0F));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the yaw of the mob's head.\r\n\t * \r\n\t * @return The current yaw.\r\n\t */\r\n\tpublic float getHeadPitch() {\r\n\t\treturn (handle.getBytes().read(2) * 360.F) / 256.0F;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the yaw of the mob's head.\r\n\t * \r\n\t * @param value - new yaw.\r\n\t */\r\n\tpublic void setHeadPitch(float value) {\r\n\t\thandle.getBytes().write(2, (byte) (value * 256.0F / 360.0F));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the velocity in the x axis.\r\n\t * \r\n\t * @return The current velocity X\r\n\t */\r\n\tpublic double getVelocityX() {\r\n\t\treturn handle.getIntegers().read(2) / 8000.0D;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the velocity in the x axis.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setVelocityX(double value) {\r\n\t\thandle.getIntegers().write(2, (int) (value * 8000.0D));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the velocity in the y axis.\r\n\t * \r\n\t * @return The current velocity y\r\n\t */\r\n\tpublic double getVelocityY() {\r\n\t\treturn handle.getIntegers().read(3) / 8000.0D;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the velocity in the y axis.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setVelocityY(double value) {\r\n\t\thandle.getIntegers().write(3, (int) (value * 8000.0D));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the velocity in the z axis.\r\n\t * \r\n\t * @return The current velocity z\r\n\t */\r\n\tpublic double getVelocityZ() {\r\n\t\treturn handle.getIntegers().read(4) / 8000.0D;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the velocity in the z axis.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setVelocityZ(double value) {\r\n\t\thandle.getIntegers().write(4, (int) (value * 8000.0D));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the data watcher.\r\n\t * <p>\r\n\t * Content varies by mob, see Entities.\r\n\t * \r\n\t * @return The current Metadata\r\n\t */\r\n\tpublic WrappedDataWatcher getMetadata() {\r\n\t\treturn handle.getDataWatcherModifier().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set the data watcher.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setMetadata(WrappedDataWatcher value) {\r\n\t\thandle.getDataWatcherModifier().write(0, value);\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerSpawnEntityLiving.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerSpawnEntityLiving.java	(date 1564757845947)
+@@ -6,7 +6,7 @@
+ import com.comphenix.protocol.events.PacketEvent;
+ import com.comphenix.protocol.injector.PacketConstructor;
+ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+ import org.bukkit.entity.EntityType;
+Index: src/main/java/net/gitcoder/api/bukkit/module/tag/api/TagPacket.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.module.tag.api;\r\n\r\nimport com.google.common.collect.Sets;\r\nimport net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;\r\nimport net.gitcoder.api.java.utility.TeamTagUtil;\r\nimport org.bukkit.Bukkit;\r\nimport org.bukkit.entity.HumanEntity;\r\nimport org.bukkit.entity.Player;\r\n\r\nimport java.util.Collection;\r\nimport java.util.stream.Collectors;\r\n\r\n@SuppressWarnings(\"all\")\r\npublic class TagPacket {\r\n\r\n    private WrapperPlayServerScoreboardTeam packet;\r\n\r\n    /* ------------------------------------------------- */\r\n    private String name;\r\n    private int mode;\r\n    private Collection<Player> players = Sets.newHashSet();\r\n    /* ------------------------------------------------- */\r\n\r\n    public TagPacket(String name, int mode) {\r\n        this.name = TeamTagUtil.parseName(name);\r\n        this.mode = mode;\r\n\r\n        this.packet = new WrapperPlayServerScoreboardTeam();\r\n\r\n        this.packet.setName(name);\r\n        this.packet.setDisplayName(name);\r\n        this.packet.setMode(mode);\r\n        this.packet.setNameTagVisibility(\"ALWAYS\");\r\n    }\r\n\r\n    public TagPacket(String name, int mode, Player player) {\r\n        this(name, mode);\r\n        players.add(player);\r\n        packet.getPlayers().add(player.getName());\r\n    }\r\n\r\n    public TagPacket(String name, int mode, Collection<Player> players) {\r\n        this(name, mode);\r\n        this.players.addAll(players);\r\n        packet.getPlayers().addAll(players.stream().map(HumanEntity::getName).collect(Collectors.toList()));\r\n    }\r\n\r\n    public void insertData(TagData data) {\r\n        this.packet.setPrefix(data.getPrefix());\r\n        this.packet.setSuffix(data.getSuffix());\r\n    }\r\n\r\n    public boolean hasPlayer(Player player) {\r\n        return players.contains(player);\r\n    }\r\n\r\n    @Deprecated\r\n    public void addPlayer(Player player) {\r\n        addPlayer(player, null);\r\n    }\r\n\r\n    public void addPlayer(Player player, TagData data) {\r\n        players.add(player);\r\n        packet.getPlayers().add(player.getName());\r\n\r\n        TagPacket packet = new TagPacket(getName(), WrapperPlayServerScoreboardTeam.Mode.PLAYERS_ADDED, player);\r\n        if(data != null) packet.insertData(data);\r\n        packet.send();\r\n    }\r\n\r\n    @Deprecated\r\n    public void removePlayer(Player player) {\r\n        removePlayer(player, null);\r\n    }\r\n\r\n    public void removePlayer(Player player, TagData data) {\r\n        players.add(player);\r\n        packet.getPlayers().remove(player.getName());\r\n\r\n        TagPacket packet = new TagPacket(getName(), WrapperPlayServerScoreboardTeam.Mode.PLAYERS_REMOVED, player);\r\n        if(data != null) packet.insertData(data);\r\n        packet.send();\r\n    }\r\n\r\n    public Collection<Player> getPlayers() {\r\n        return players;\r\n    }\r\n\r\n    public Collection<String> getPacketMembers() {\r\n        return unsafe().getPlayers();\r\n    }\r\n\r\n    public String getName() {\r\n        return name;\r\n    }\r\n\r\n    public void send(Player player) {\r\n        packet.sendPacket(player);\r\n    }\r\n\r\n    public void sendToTeamMembers() {\r\n        players.forEach(this::send);\r\n    }\r\n\r\n    public void send() {\r\n        Bukkit.getOnlinePlayers().forEach(this::send);\r\n    }\r\n\r\n    public WrapperPlayServerScoreboardTeam unsafe() {\r\n        return packet;\r\n    }\r\n\r\n    public int getMode() {\r\n        return mode;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/module/tag/api/TagPacket.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/module/tag/api/TagPacket.java	(date 1564757846563)
+@@ -2,7 +2,7 @@
+ 
+ import com.google.common.collect.Sets;
+ import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;
+-import net.gitcoder.api.java.utility.TeamTagUtil;
++import net.gitcoder.api.bukkit.utility.TeamTagUtil;
+ import org.bukkit.Bukkit;
+ import org.bukkit.entity.HumanEntity;
+ import org.bukkit.entity.Player;
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityEquipment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.events.PacketEvent;\r\nimport com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\nimport org.bukkit.World;\r\nimport org.bukkit.entity.Entity;\r\nimport org.bukkit.inventory.ItemStack;\r\n\r\npublic class WrapperPlayServerEntityEquipment extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.ENTITY_EQUIPMENT;\r\n\r\n\tpublic WrapperPlayServerEntityEquipment() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerEntityEquipment(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Entity ID.\r\n\t * <p>\r\n\t * Notes: entity's ID\r\n\t * \r\n\t * @return The current Entity ID\r\n\t */\r\n\tpublic int getEntityID() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Entity ID.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityID(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param world - the current world of the entity.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(World world) {\r\n\t\treturn handle.getEntityModifier(world).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param event - the packet event.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(PacketEvent event) {\r\n\t\treturn getEntity(event.getPlayer().getWorld());\r\n\t}\r\n\r\n\tpublic ItemSlot getSlot() {\r\n\t\treturn handle.getItemSlots().read(0);\r\n\t}\r\n\r\n\tpublic void setSlot(ItemSlot value) {\r\n\t\thandle.getItemSlots().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Item.\r\n\t * <p>\r\n\t * Notes: item in slot format\r\n\t * \r\n\t * @return The current Item\r\n\t */\r\n\tpublic ItemStack getItem() {\r\n\t\treturn handle.getItemModifier().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Item.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setItem(ItemStack value) {\r\n\t\thandle.getItemModifier().write(0, value);\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityEquipment.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityEquipment.java	(date 1564757845293)
+@@ -4,7 +4,7 @@
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.events.PacketEvent;
+ import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+ import org.bukkit.inventory.ItemStack;
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityLook.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.events.PacketEvent;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\nimport org.bukkit.World;\r\nimport org.bukkit.entity.Entity;\r\n\r\npublic class WrapperPlayServerEntityLook extends AbstractPacket {\r\n\tpublic static final PacketType TYPE = PacketType.Play.Server.ENTITY_LOOK;\r\n\r\n\tpublic WrapperPlayServerEntityLook() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerEntityLook(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Entity ID.\r\n\t * <p>\r\n\t * Notes: entity's ID\r\n\t * \r\n\t * @return The current Entity ID\r\n\t */\r\n\tpublic int getEntityID() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Entity ID.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityID(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param world - the current world of the entity.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(World world) {\r\n\t\treturn handle.getEntityModifier(world).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param event - the packet event.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(PacketEvent event) {\r\n\t\treturn getEntity(event.getPlayer().getWorld());\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the yaw of the current entity.\r\n\t * \r\n\t * @return The current Yaw\r\n\t */\r\n\tpublic float getYaw() {\r\n\t\treturn (handle.getBytes().read(0) * 360.F) / 256.0F;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the yaw of the current entity.\r\n\t * \r\n\t * @param value - new yaw.\r\n\t */\r\n\tpublic void setYaw(float value) {\r\n\t\thandle.getBytes().write(0, (byte) (value * 256.0F / 360.0F));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the pitch of the current entity.\r\n\t * \r\n\t * @return The current pitch\r\n\t */\r\n\tpublic float getPitch() {\r\n\t\treturn (handle.getBytes().read(1) * 360.F) / 256.0F;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the pitch of the current entity.\r\n\t * \r\n\t * @param value - new pitch.\r\n\t */\r\n\tpublic void setPitch(float value) {\r\n\t\thandle.getBytes().write(1, (byte) (value * 256.0F / 360.0F));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve On Ground.\r\n\t * \r\n\t * @return The current On Ground\r\n\t */\r\n\tpublic boolean getOnGround() {\r\n\t\treturn handle.getBooleans().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set On Ground.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setOnGround(boolean value) {\r\n\t\thandle.getBooleans().write(0, value);\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityLook.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityLook.java	(date 1564757846701)
+@@ -3,7 +3,7 @@
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.events.PacketEvent;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+ 
+Index: src/main/java/net/gitcoder/api/bukkit/module/tag/api/TagData.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.module.tag.api;\r\n\r\nimport net.gitcoder.api.bukkit.Management;\r\nimport net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;\r\nimport net.gitcoder.api.java.utility.TeamTagUtil;\r\nimport org.bukkit.Bukkit;\r\nimport org.bukkit.entity.Player;\r\n\r\nimport java.util.Collection;\r\n\r\n@SuppressWarnings(\"all\")\r\npublic class TagData {\r\n\r\n    private TagPacket packet;\r\n\r\n    public TagData(String name, String prefix, String suffix) {\r\n        packet = new TagPacket(TeamTagUtil.parseName(name), WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);\r\n\r\n        this.packet.unsafe().setPrefix(TeamTagUtil.parse(prefix));\r\n        this.packet.unsafe().setSuffix(TeamTagUtil.parse(suffix));\r\n\r\n        packet.insertData(this);\r\n    }\r\n\r\n    public TagPacket getPacket() {\r\n        return packet;\r\n    }\r\n\r\n    public String getName() {\r\n        return getPacket().getName();\r\n    }\r\n\r\n    public boolean hasPlayer(Player player) {\r\n        return getPacket().hasPlayer(player);\r\n    }\r\n\r\n    public void addPlayer(Player player) {\r\n        getPacket().addPlayer(player, this);\r\n    }\r\n\r\n    public void removePlayer(Player player) {\r\n        getPacket().removePlayer(player, this);\r\n\r\n        if(getPlayers().size() == 0) {\r\n            Management.TAG_MANAGER.removeTeam(this);\r\n        }\r\n    }\r\n\r\n    public Collection<Player> getPlayers() {\r\n        return getPacket().getPlayers();\r\n    }\r\n\r\n    public String getPrefix() {\r\n        return packet.unsafe().getPrefix();\r\n    }\r\n\r\n    public String getSuffix() {\r\n        return packet.unsafe().getSuffix();\r\n    }\r\n\r\n    public void destroy() {\r\n        Bukkit.getOnlinePlayers().forEach(this::destroy);\r\n    }\r\n\r\n    public void destroy(Player player) {\r\n        TagPacket packet = new TagPacket(getName(), WrapperPlayServerScoreboardTeam.Mode.TEAM_REMOVED);\r\n        packet.insertData(this);\r\n        packet.send(player);\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/module/tag/api/TagData.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/module/tag/api/TagData.java	(date 1564757846825)
+@@ -2,7 +2,7 @@
+ 
+ import net.gitcoder.api.bukkit.Management;
+ import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;
+-import net.gitcoder.api.java.utility.TeamTagUtil;
++import net.gitcoder.api.bukkit.utility.TeamTagUtil;
+ import org.bukkit.Bukkit;
+ import org.bukkit.entity.Player;
+ 
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityHeadRotation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.events.PacketEvent;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\nimport org.bukkit.World;\r\nimport org.bukkit.entity.Entity;\r\n\r\npublic class WrapperPlayServerEntityHeadRotation extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.ENTITY_HEAD_ROTATION;\r\n\r\n\tpublic WrapperPlayServerEntityHeadRotation() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerEntityHeadRotation(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Entity ID.\r\n\t * <p>\r\n\t * Notes: entity's ID\r\n\t *\r\n\t * @return The current Entity ID\r\n\t */\r\n\tpublic int getEntityID() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Entity ID.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityID(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t *\r\n\t * @param world - the current world of the entity.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(World world) {\r\n\t\treturn handle.getEntityModifier(world).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t *\r\n\t * @param event - the packet event.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(PacketEvent event) {\r\n\t\treturn getEntity(event.getPlayer().getWorld());\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Head Yaw.\r\n\t * <p>\r\n\t * Notes: head yaw in steps of 2p/256\r\n\t *\r\n\t * @return The current Head Yaw\r\n\t */\r\n\tpublic byte getHeadYaw() {\r\n\t\treturn handle.getBytes().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Head Yaw.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setHeadYaw(byte value) {\r\n\t\thandle.getBytes().write(0, value);\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityHeadRotation.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityHeadRotation.java	(date 1564757845896)
+@@ -3,7 +3,7 @@
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.events.PacketEvent;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+ 
+Index: src/main/java/net/gitcoder/api/bukkit/module/tag/api/TagManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.module.tag.api;\r\n\r\nimport net.gitcoder.api.java.utility.TagDataMapUtil;\r\nimport org.bukkit.entity.Player;\r\n\r\nimport java.util.Collection;\r\nimport java.util.Map;\r\n\r\n@SuppressWarnings(\"all\")\r\npublic class TagManager {\r\n\r\n    private TagDataMapUtil datas = new TagDataMapUtil();\r\n\r\n    public TagManager() {\r\n        TagAppiler.init(this);\r\n    }\r\n\r\n    public void setTag(Player player, String prefix) {\r\n        setTag(player, prefix, \"\");\r\n    }\r\n\r\n    public void setTag(Player player, String prefix, String suffix) {\r\n        setTag(player, player.getName(), prefix, suffix);\r\n    }\r\n\r\n    public void setTag(Player player, String team, String prefix, String suffix) {\r\n        team = team.toLowerCase();\r\n\r\n        synchronized(this) {\r\n            if(hasTag(player)) clearTag(player);\r\n        }\r\n\r\n        TagData data = datas.get(team);\r\n\r\n        if(data == null) {\r\n            data = new TagData(team, prefix, suffix);\r\n            datas.put(team, data);\r\n            data.getPacket().send();\r\n\r\n            if(data.getName().contains(player.getName())) {\r\n                data.destroy();\r\n                data.getPacket().send();\r\n            }\r\n        }\r\n        synchronized(this) {\r\n            data.addPlayer(player);\r\n        }\r\n    }\r\n\r\n    public void sendTags(Player player) {\r\n        datas.values().forEach(data -> data.getPacket().send(player));\r\n    }\r\n\r\n    public void clearTags() {\r\n        datas.values().forEach(this::removeTeam);\r\n    }\r\n\r\n    public void removeTeam(TagData team) {\r\n        removeTeam(team.getName());\r\n    }\r\n\r\n    public void removeTeam(String team) {\r\n        if(datas.get(team) == null) return;\r\n        TagData data = datas.get(team);\r\n        data.destroy();\r\n        datas.remove(team);\r\n    }\r\n\r\n    public void clearTag(Player player) {\r\n        datas.values()\r\n                .stream()\r\n                .filter(data -> data.hasPlayer(player))\r\n                .forEach(data -> data.removePlayer(player));\r\n    }\r\n\r\n    public boolean hasTag(Player player) {\r\n        return getTagData(player) != null;\r\n    }\r\n\r\n    public TagData getTagData(Player player) {\r\n        for(TagData data: datas.values()) {\r\n            if(!data.hasPlayer(player)) continue;\r\n            return data;\r\n        }\r\n        return null;\r\n    }\r\n\r\n    public Map<String, TagData> getDatasMap() {\r\n        return datas;\r\n    }\r\n\r\n    public Collection<TagData> getDatas() {\r\n        return datas.values();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/module/tag/api/TagManager.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/module/tag/api/TagManager.java	(date 1564757846475)
+@@ -1,6 +1,6 @@
+ package net.gitcoder.api.bukkit.module.tag.api;
+ 
+-import net.gitcoder.api.java.utility.TagDataMapUtil;
++import net.gitcoder.api.bukkit.utility.TagDataMapUtil;
+ import org.bukkit.entity.Player;
+ 
+ import java.util.Collection;
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerNamedEntitySpawn.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/**\r\n * PacketWrapper - ProtocolLib wrappers for Minecraft packets\r\n * Copyright (C) dmulloy2 <http://dmulloy2.net>\r\n * Copyright (C) Kristian S. Strangeland\r\n *\r\n * This program is free software: you can redistribute it and/or modify\r\n * it under the terms of the GNU General Public License as published by\r\n * the Free Software Foundation, either version 3 of the License, or\r\n * (at your option) any later version.\r\n *\r\n * This program is distributed in the hope that it will be useful,\r\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\r\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\r\n * GNU General Public License for more details.\r\n *\r\n * You should have received a copy of the GNU General Public License\r\n * along with this program.  If not, see <http://www.gnu.org/licenses/>.\r\n */\r\npackage net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.events.PacketEvent;\r\nimport com.comphenix.protocol.wrappers.WrappedDataWatcher;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\nimport org.bukkit.World;\r\nimport org.bukkit.entity.Entity;\r\nimport org.bukkit.util.Vector;\r\n\r\nimport java.util.UUID;\r\n\r\npublic class WrapperPlayServerNamedEntitySpawn extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.NAMED_ENTITY_SPAWN;\r\n\r\n\tpublic WrapperPlayServerNamedEntitySpawn() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerNamedEntitySpawn(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Entity ID.\r\n\t * <p>\r\n\t * Notes: entity's ID\r\n\t * \r\n\t * @return The current Entity ID\r\n\t */\r\n\tpublic int getEntityID() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Entity ID.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityID(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param world - the current world of the entity.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(World world) {\r\n\t\treturn handle.getEntityModifier(world).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param event - the packet event.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(PacketEvent event) {\r\n\t\treturn getEntity(event.getPlayer().getWorld());\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Player UUID.\r\n\t * <p>\r\n\t * Notes: player's UUID\r\n\t * \r\n\t * @return The current Player UUID\r\n\t */\r\n\tpublic UUID getPlayerUUID() {\r\n\t\treturn handle.getUUIDs().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Player UUID.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setPlayerUUID(UUID value) {\r\n\t\thandle.getUUIDs().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the position of the spawned entity as a vector.\r\n\t * \r\n\t * @return The position as a vector.\r\n\t */\r\n\tpublic Vector getPosition() {\r\n\t\treturn new Vector(getX(), getY(), getZ());\r\n\t}\r\n\r\n\t/**\r\n\t * Set the position of the spawned entity using a vector.\r\n\t * \r\n\t * @param position - the new position.\r\n\t */\r\n\tpublic void setPosition(Vector position) {\r\n\t\tsetX(position.getX());\r\n\t\tsetY(position.getY());\r\n\t\tsetZ(position.getZ());\r\n\t}\r\n\r\n\tpublic double getX() {\r\n\t\treturn handle.getDoubles().read(0);\r\n\t}\r\n\r\n\tpublic void setX(double value) {\r\n\t\thandle.getDoubles().write(0, value);\r\n\t}\r\n\r\n\tpublic double getY() {\r\n\t\treturn handle.getDoubles().read(1);\r\n\t}\r\n\r\n\tpublic void setY(double value) {\r\n\t\thandle.getDoubles().write(1, value);\r\n\t}\r\n\r\n\tpublic double getZ() {\r\n\t\treturn handle.getDoubles().read(2);\r\n\t}\r\n\r\n\tpublic void setZ(double value) {\r\n\t\thandle.getDoubles().write(2, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the yaw of the spawned entity.\r\n\t * \r\n\t * @return The current Yaw\r\n\t */\r\n\tpublic float getYaw() {\r\n\t\treturn (handle.getBytes().read(0) * 360.F) / 256.0F;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the yaw of the spawned entity.\r\n\t * \r\n\t * @param value - new yaw.\r\n\t */\r\n\tpublic void setYaw(float value) {\r\n\t\thandle.getBytes().write(0, (byte) (value * 256.0F / 360.0F));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the pitch of the spawned entity.\r\n\t * \r\n\t * @return The current pitch\r\n\t */\r\n\tpublic float getPitch() {\r\n\t\treturn (handle.getBytes().read(1) * 360.F) / 256.0F;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the pitch of the spawned entity.\r\n\t * \r\n\t * @param value - new pitch.\r\n\t */\r\n\tpublic void setPitch(float value) {\r\n\t\thandle.getBytes().write(1, (byte) (value * 256.0F / 360.0F));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Metadata.\r\n\t * <p>\r\n\t * Notes: the client will crash if no metadata is sent\r\n\t * \r\n\t * @return The current Metadata\r\n\t */\r\n\tpublic WrappedDataWatcher getMetadata() {\r\n\t\treturn handle.getDataWatcherModifier().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Metadata.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setMetadata(WrappedDataWatcher value) {\r\n\t\thandle.getDataWatcherModifier().write(0, value);\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerNamedEntitySpawn.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerNamedEntitySpawn.java	(date 1564757845516)
+@@ -22,7 +22,7 @@
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.events.PacketEvent;
+ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+ import org.bukkit.util.Vector;
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityTeleport.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.events.PacketEvent;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\nimport org.bukkit.World;\r\nimport org.bukkit.entity.Entity;\r\n\r\npublic class WrapperPlayServerEntityTeleport extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.ENTITY_TELEPORT;\r\n\r\n\tpublic WrapperPlayServerEntityTeleport() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerEntityTeleport(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve entity ID.\r\n\t *\r\n\t * @return The current EID\r\n\t */\r\n\tpublic int getEntityID() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set entity ID.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityID(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity.\r\n\t *\r\n\t * @param world - the current world of the entity.\r\n\t * @return The entity.\r\n\t */\r\n\tpublic Entity getEntity(World world) {\r\n\t\treturn handle.getEntityModifier(world).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity.\r\n\t *\r\n\t * @param event - the packet event.\r\n\t * @return The entity.\r\n\t */\r\n\tpublic Entity getEntity(PacketEvent event) {\r\n\t\treturn getEntity(event.getPlayer().getWorld());\r\n\t}\r\n\r\n\tpublic double getX() {\r\n\t\treturn handle.getDoubles().read(0);\r\n\t}\r\n\r\n\tpublic void setX(double value) {\r\n\t\thandle.getDoubles().write(0, value);\r\n\t}\r\n\r\n\tpublic double getY() {\r\n\t\treturn handle.getDoubles().read(1);\r\n\t}\r\n\r\n\tpublic void setY(double value) {\r\n\t\thandle.getDoubles().write(1, value);\r\n\t}\r\n\r\n\tpublic double getZ() {\r\n\t\treturn handle.getDoubles().read(2);\r\n\t}\r\n\r\n\tpublic void setZ(double value) {\r\n\t\thandle.getDoubles().write(2, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the yaw of the current entity.\r\n\t *\r\n\t * @return The current Yaw\r\n\t */\r\n\tpublic float getYaw() {\r\n\t\treturn (handle.getBytes().read(0) * 360.F) / 256.0F;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the yaw of the current entity.\r\n\t *\r\n\t * @param value - new yaw.\r\n\t */\r\n\tpublic void setYaw(float value) {\r\n\t\thandle.getBytes().write(0, (byte) (value * 256.0F / 360.0F));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the pitch of the current entity.\r\n\t *\r\n\t * @return The current pitch\r\n\t */\r\n\tpublic float getPitch() {\r\n\t\treturn (handle.getBytes().read(1) * 360.F) / 256.0F;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the pitch of the current entity.\r\n\t *\r\n\t * @param value - new pitch.\r\n\t */\r\n\tpublic void setPitch(float value) {\r\n\t\thandle.getBytes().write(1, (byte) (value * 256.0F / 360.0F));\r\n\t}\r\n\r\n\tpublic boolean getOnGround() {\r\n\t\treturn handle.getBooleans().read(0);\r\n\t}\r\n\r\n\tpublic void setOnGround(boolean value) {\r\n\t\thandle.getBooleans().write(0, value);\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityTeleport.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityTeleport.java	(date 1564757844943)
+@@ -3,7 +3,7 @@
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.events.PacketEvent;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+ 
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityMetadata.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.events.PacketEvent;\r\nimport com.comphenix.protocol.wrappers.WrappedWatchableObject;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\nimport org.bukkit.World;\r\nimport org.bukkit.entity.Entity;\r\n\r\nimport java.util.List;\r\n\r\npublic class WrapperPlayServerEntityMetadata extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.ENTITY_METADATA;\r\n\r\n\tpublic WrapperPlayServerEntityMetadata() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerEntityMetadata(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Entity ID.\r\n\t * <p>\r\n\t * Notes: entity's ID\r\n\t * \r\n\t * @return The current Entity ID\r\n\t */\r\n\tpublic int getEntityID() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Entity ID.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityID(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param world - the current world of the entity.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(World world) {\r\n\t\treturn handle.getEntityModifier(world).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param event - the packet event.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(PacketEvent event) {\r\n\t\treturn getEntity(event.getPlayer().getWorld());\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Metadata.\r\n\t * \r\n\t * @return The current Metadata\r\n\t */\r\n\tpublic List<WrappedWatchableObject> getMetadata() {\r\n\t\treturn handle.getWatchableCollectionModifier().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Metadata.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setMetadata(List<WrappedWatchableObject> value) {\r\n\t\thandle.getWatchableCollectionModifier().write(0, value);\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityMetadata.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityMetadata.java	(date 1564757846385)
+@@ -4,7 +4,7 @@
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.events.PacketEvent;
+ import com.comphenix.protocol.wrappers.WrappedWatchableObject;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+ 
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerPlayerInfo.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>/**\r\n * PacketWrapper - ProtocolLib wrappers for Minecraft packets\r\n * Copyright (C) dmulloy2 <http://dmulloy2.net>\r\n * Copyright (C) Kristian S. Strangeland\r\n *\r\n * This program is free software: you can redistribute it and/or modify\r\n * it under the terms of the GNU General Public License as published by\r\n * the Free Software Foundation, either version 3 of the License, or\r\n * (at your option) any later version.\r\n *\r\n * This program is distributed in the hope that it will be useful,\r\n * but WITHOUT ANY WARRANTY; without even the implied warranty of\r\n * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\r\n * GNU General Public License for more details.\r\n *\r\n * You should have received a copy of the GNU General Public License\r\n * along with this program.  If not, see <http://www.gnu.org/licenses/>.\r\n */\r\npackage net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;\r\nimport com.comphenix.protocol.wrappers.PlayerInfoData;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\n\r\nimport java.util.List;\r\n\r\npublic class WrapperPlayServerPlayerInfo extends AbstractPacket {\r\n\tpublic static final PacketType TYPE = PacketType.Play.Server.PLAYER_INFO;\r\n\r\n\tpublic WrapperPlayServerPlayerInfo() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerPlayerInfo(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\tpublic PlayerInfoAction getAction() {\r\n\t\treturn handle.getPlayerInfoAction().read(0);\r\n\t}\r\n\r\n\tpublic void setAction(PlayerInfoAction value) {\r\n\t\thandle.getPlayerInfoAction().write(0, value);\r\n\t}\r\n\r\n\tpublic List<PlayerInfoData> getData() {\r\n\t\treturn handle.getPlayerInfoDataLists().read(0);\r\n\t}\r\n\r\n\tpublic void setData(List<PlayerInfoData> value) {\r\n\t\thandle.getPlayerInfoDataLists().write(0, value);\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerPlayerInfo.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerPlayerInfo.java	(date 1564757845024)
+@@ -22,7 +22,7 @@
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
+ import com.comphenix.protocol.wrappers.PlayerInfoData;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ 
+ import java.util.List;
+ 
+Index: src/main/java/net/gitcoder/api/bukkit/module/tag/ProtocolTags.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.module.tag;\r\n\r\nimport net.gitcoder.api.bukkit.Management;\r\nimport net.gitcoder.api.bukkit.gamer.group.Group;\r\nimport net.gitcoder.api.bukkit.module.tag.api.TagManager;\r\nimport net.gitcoder.api.java.utility.TeamTagUtil;\r\nimport org.bukkit.entity.Player;\r\n\r\npublic class ProtocolTags {\r\n\r\n    private static TagManager tagManager = new TagManager();\r\n\r\n    public static void setTag(Player player) {\r\n        Group group = Management.getGamer(player).getGroup();\r\n\r\n        tagManager.setTag(player, group.getGroup(),\r\n                    TeamTagUtil.colorize(group.getPrefix()), TeamTagUtil.colorize(group.getSuffix()));\r\n\r\n        player.setDisplayName(TeamTagUtil.colorize(group.getPrefix()) + player.getDisplayName());\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/module/tag/ProtocolTags.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/module/tag/ProtocolTags.java	(date 1564757846525)
+@@ -3,7 +3,7 @@
+ import net.gitcoder.api.bukkit.Management;
+ import net.gitcoder.api.bukkit.gamer.group.Group;
+ import net.gitcoder.api.bukkit.module.tag.api.TagManager;
+-import net.gitcoder.api.java.utility.TeamTagUtil;
++import net.gitcoder.api.bukkit.utility.TeamTagUtil;
+ import org.bukkit.entity.Player;
+ 
+ public class ProtocolTags {
+Index: src/main/java/net/gitcoder/api/java/utility/ReflectionUtil.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.utility;\r\n\r\nimport org.bukkit.Bukkit;\r\n\r\nimport java.lang.reflect.Constructor;\r\nimport java.lang.reflect.Field;\r\nimport java.lang.reflect.Method;\r\nimport java.lang.reflect.Modifier;\r\nimport java.util.Objects;\r\n\r\n/**\r\n * @Author GitCoder.\r\n * <p>\r\n * The code is developed by the developer GitCoder.\r\n * You cannot change this code or interact with it in any way.\r\n * <p>\r\n * All right's is reserved.\r\n */\r\npublic class ReflectionUtil {\r\n\r\n    public void setDeclaredField(Object object, String field, Object value) throws IllegalAccessException, NoSuchFieldException {\r\n        Field f = object.getClass().getDeclaredField(field);\r\n        f.setAccessible(true);\r\n        f.set(object, value);\r\n        f.setAccessible(false);\r\n    }\r\n\r\n    public <T> T getField(String name, Object object) {\r\n        return getField(name, object.getClass(), object);\r\n    }\r\n\r\n    public <T> T getField(String name, Class clazz) {\r\n        return getField(name, clazz, null);\r\n    }\r\n\r\n    public <T> T getField(String name, Class clazz, Object object) {\r\n        try {\r\n            Field field = clazz.getDeclaredField(name);\r\n            field.setAccessible(true);\r\n            T obj = (T) field.get(object);\r\n            field.setAccessible(false);\r\n            return obj;\r\n        } catch (Exception ex) {\r\n            return null;\r\n        }\r\n    }\r\n\r\n    public static final String serverVersion = null;\r\n\r\n    static {\r\n        try {\r\n            Class.forName(\"org.bukkit.Bukkit\");\r\n            setObject(ReflectionUtil.class, null, \"serverVersion\", Bukkit.getServer().getClass().getPackage().getName()\r\n                    .substring(Bukkit.getServer().getClass().getPackage().getName().lastIndexOf('.') + 1));\r\n        } catch (Exception ignored) {\r\n        }\r\n    }\r\n\r\n    public static Class<?> getBukkitClass(String clazz) throws Exception {\r\n        return Class.forName(\"org.bukkit.craftbukkit.\" + serverVersion + \".\" + clazz);\r\n    }\r\n\r\n    public static Class<?> getBungeeClass(String path, String clazz) throws Exception {\r\n        return Class.forName(\"net.md_5.bungee.\" + path + \".\" + clazz);\r\n    }\r\n\r\n    private static Constructor<?> getConstructor(Class<?> clazz, Class<?>... args) throws Exception {\r\n        Constructor<?> c = clazz.getConstructor(args);\r\n        c.setAccessible(true);\r\n        return c;\r\n    }\r\n\r\n    public static Enum<?> getEnum(Class<?> clazz, String constant) throws Exception {\r\n        Class<?> c = Class.forName(clazz.getName());\r\n        Enum<?>[] econstants = (Enum<?>[]) c.getEnumConstants();\r\n        for (Enum<?> e : econstants)\r\n            if (e.name().equalsIgnoreCase(constant))\r\n                return e;\r\n        throw new Exception(\"Enum constant not found \" + constant);\r\n    }\r\n\r\n    public static Enum<?> getEnum(Class<?> clazz, String enumname, String constant) throws Exception {\r\n        Class<?> c = Class.forName(clazz.getName() + \"$\" + enumname);\r\n        Enum<?>[] econstants = (Enum<?>[]) c.getEnumConstants();\r\n        for (Enum<?> e : econstants)\r\n            if (e.name().equalsIgnoreCase(constant))\r\n                return e;\r\n        throw new Exception(\"Enum constant not found \" + constant);\r\n    }\r\n\r\n    private static Field getField(Class<?> clazz, String fname) throws Exception {\r\n        Field f;\r\n        try {\r\n            f = clazz.getDeclaredField(fname);\r\n        } catch (Exception e) {\r\n            f = clazz.getField(fname);\r\n        }\r\n        setFieldAccessible(f);\r\n        return f;\r\n    }\r\n\r\n    public static void setField(final Object object, final String field, final Object fieldValue) {\r\n        Field f = null;\r\n        final Class clazz = object.getClass();\r\n        try {\r\n            f = clazz.getDeclaredField(field);\r\n            f.setAccessible(true);\r\n            f.set(object, fieldValue);\r\n        } catch (NoSuchFieldException ignored) {\r\n        } catch (IllegalAccessException e) {\r\n            e.printStackTrace();\r\n        } finally {\r\n            f.setAccessible(false);\r\n        }\r\n    }\r\n\r\n    public static Object getFirstObject(Class<?> clazz, Class<?> objclass, Object instance) throws Exception {\r\n        Field f = null;\r\n        for (Field fi : clazz.getDeclaredFields())\r\n            if (fi.getType().equals(objclass)) {\r\n                f = fi;\r\n                break;\r\n            }\r\n\r\n        if (f == null)\r\n            for (Field fi : clazz.getFields())\r\n                if (fi.getType().equals(objclass)) {\r\n                    f = fi;\r\n                    break;\r\n                }\r\n\r\n        assert f != null;\r\n        setFieldAccessible(f);\r\n        return f.get(instance);\r\n    }\r\n\r\n    private static Method getMethod(Class<?> clazz, String mname) {\r\n        Method m;\r\n        try {\r\n            m = clazz.getDeclaredMethod(mname);\r\n        } catch (Exception e) {\r\n            try {\r\n                m = clazz.getMethod(mname);\r\n            } catch (Exception ex) {\r\n                return null;\r\n            }\r\n        }\r\n        m.setAccessible(true);\r\n        return m;\r\n    }\r\n\r\n    public static <T> Field getField(Class<?> target, String name, Class<T> fieldType, int index) {\r\n        for (final Field field : target.getDeclaredFields()) {\r\n            if ((name == null || field.getName().equals(name)) && fieldType.isAssignableFrom(field.getType()) && index-- <= 0) {\r\n                field.setAccessible(true);\r\n                return field;\r\n            }\r\n        }\r\n\r\n        if (target.getSuperclass() != null)\r\n            return getField(target.getSuperclass(), name, fieldType, index);\r\n        throw new IllegalArgumentException(\"Cannot find field with type \" + fieldType);\r\n    }\r\n\r\n\r\n    private static Method getMethod(Class<?> clazz, String mname, Class<?>... args) {\r\n        Method m;\r\n        try {\r\n            m = clazz.getDeclaredMethod(mname, args);\r\n        } catch (Exception e) {\r\n            try {\r\n                m = clazz.getMethod(mname, args);\r\n            } catch (Exception ex) {\r\n                return null;\r\n            }\r\n        }\r\n        m.setAccessible(true);\r\n        return m;\r\n    }\r\n\r\n    public static Class<?> getNMSClass(String clazz) throws Exception {\r\n        return Class.forName(\"net.minecraft.server.\" + serverVersion + \".\" + clazz);\r\n    }\r\n\r\n    public static Object getObject(Class<?> clazz, Object obj, String fname) throws Exception {\r\n        return getField(clazz, fname).get(obj);\r\n    }\r\n\r\n    public static Object getObject(Object obj, String fname) throws Exception {\r\n        return getField(obj.getClass(), fname).get(obj);\r\n    }\r\n\r\n    public static Object invokeConstructor(Class<?> clazz, Class<?>[] args, Object... initargs) throws Exception {\r\n        return getConstructor(clazz, args).newInstance(initargs);\r\n    }\r\n\r\n    public static Object invokeMethod(Class<?> clazz, Object obj, String method) throws Exception {\r\n        return Objects.requireNonNull(getMethod(clazz, method)).invoke(obj);\r\n    }\r\n\r\n    public static Object invokeMethod(Class<?> clazz, Object obj, String method, Class<?>[] args, Object... initargs)\r\n            throws Exception {\r\n        return Objects.requireNonNull(getMethod(clazz, method, args)).invoke(obj, initargs);\r\n    }\r\n\r\n    public static Object invokeMethod(Class<?> clazz, Object obj, String method, Object... initargs) throws Exception {\r\n        return Objects.requireNonNull(getMethod(clazz, method)).invoke(obj, initargs);\r\n    }\r\n\r\n    public static Object invokeMethod(Object obj, String method) throws Exception {\r\n        return Objects.requireNonNull(getMethod(obj.getClass(), method)).invoke(obj);\r\n    }\r\n\r\n    public static Object invokeMethod(Object obj, String method, Object[] initargs) throws Exception {\r\n        return Objects.requireNonNull(getMethod(obj.getClass(), method)).invoke(obj, initargs);\r\n    }\r\n\r\n    private static void setFieldAccessible(Field f) throws Exception {\r\n        f.setAccessible(true);\r\n        Field modifiers = Field.class.getDeclaredField(\"modifiers\");\r\n        modifiers.setAccessible(true);\r\n        modifiers.setInt(f, f.getModifiers() & ~Modifier.FINAL);\r\n    }\r\n\r\n    public static void setObject(Class<?> clazz, Object obj, String fname, Object value) throws Exception {\r\n        getField(clazz, fname).set(obj, value);\r\n    }\r\n\r\n    public static void setObject(Object obj, String fname, Object value) throws Exception {\r\n        getField(obj.getClass(), fname).set(obj, value);\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/utility/ReflectionUtil.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/utility/ReflectionUtil.java	(date 1564757845620)
+@@ -16,7 +16,7 @@
+  * <p>
+  * All right's is reserved.
+  */
+-public class ReflectionUtil {
++public final class ReflectionUtil {
+ 
+     public void setDeclaredField(Object object, String field, Object value) throws IllegalAccessException, NoSuchFieldException {
+         Field f = object.getClass().getDeclaredField(field);
+Index: src/main/java/net/gitcoder/api/bukkit/GitAPI.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit;\r\n\r\nimport com.comphenix.protocol.ProtocolLibrary;\r\nimport net.gitcoder.api.bukkit.gamer.listener.GamerListener;\r\nimport net.gitcoder.api.bukkit.module.entity.listeners.FakeEntityClickListener;\r\nimport net.gitcoder.api.bukkit.module.tag.listeners.PlayerTagListener;\r\nimport net.gitcoder.api.java.mysql.MySQL;\r\nimport org.bukkit.Bukkit;\r\nimport org.bukkit.plugin.java.JavaPlugin;\r\n\r\n/**\r\n * @Author GitCoder.\r\n * <p>\r\n * The code is developed by the developer GitCoder.\r\n * You cannot change this code or interact with it in any way.\r\n * <p>\r\n * All right's is reserved.\r\n */\r\npublic class GitAPI extends JavaPlugin {\r\n\r\n    private final MySQL DATABASE = MySQL\r\n            .newBuilder()\r\n            .host(\"localhost\")\r\n            .user(\"root\")\r\n            .database(\"database\")\r\n            .create();\r\n\r\n    public Management MANAGEMENT = new Management();\r\n\r\n    /**\r\n     * Override method, triggered when the server start.\r\n     */\r\n    @Override\r\n    public void onEnable() {\r\n\r\n        Bukkit.getPluginManager().registerEvents(new GamerListener(), this);\r\n        Bukkit.getPluginManager().registerEvents(new PlayerTagListener(), this);\r\n\r\n        //LoggerUtil.info(\"\",true,\"События были загружены во внутренний кеш\");\r\n\r\n        registerProtocolListener();\r\n\r\n    }\r\n\r\n    /**\r\n     * Регистрация пакетного листенера для прослушки клика\r\n     * по MoonFakeEntity\r\n     */\r\n    private void registerProtocolListener() {\r\n        ProtocolLibrary.getProtocolManager().addPacketListener(new FakeEntityClickListener(this));\r\n    }\r\n\r\n\r\n    /**\r\n     * Override method, troggered when the server shut down.\r\n     */\r\n    @Override\r\n    public void onDisable() {\r\n\r\n    }\r\n\r\n    public MySQL getDatabase() {\r\n        return DATABASE;\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/GitAPI.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/GitAPI.java	(date 1564757846645)
+@@ -1,6 +1,7 @@
+ package net.gitcoder.api.bukkit;
+ 
+ import com.comphenix.protocol.ProtocolLibrary;
++import lombok.Getter;
+ import net.gitcoder.api.bukkit.gamer.listener.GamerListener;
+ import net.gitcoder.api.bukkit.module.entity.listeners.FakeEntityClickListener;
+ import net.gitcoder.api.bukkit.module.tag.listeners.PlayerTagListener;
+@@ -18,14 +19,15 @@
+  */
+ public class GitAPI extends JavaPlugin {
+ 
+-    private final MySQL DATABASE = MySQL
++    @Getter
++    private final MySQL database = MySQL
+             .newBuilder()
+             .host("localhost")
+             .user("root")
+             .database("database")
+             .create();
+ 
+-    public Management MANAGEMENT = new Management();
++    public static Management MANAGEMENT = new Management();
+ 
+     /**
+      * Override method, triggered when the server start.
+@@ -50,16 +52,4 @@
+         ProtocolLibrary.getProtocolManager().addPacketListener(new FakeEntityClickListener(this));
+     }
+ 
+-
+-    /**
+-     * Override method, troggered when the server shut down.
+-     */
+-    @Override
+-    public void onDisable() {
+-
+-    }
+-
+-    public MySQL getDatabase() {
+-        return DATABASE;
+-    }
+ }
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerAnimation.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.events.PacketEvent;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\nimport org.bukkit.World;\r\nimport org.bukkit.entity.Entity;\r\n\r\npublic class WrapperPlayServerAnimation extends AbstractPacket {\r\n\tpublic static final PacketType TYPE = PacketType.Play.Server.ANIMATION;\r\n\r\n\tpublic WrapperPlayServerAnimation() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerAnimation(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Entity ID.\r\n\t * <p>\r\n\t * Notes: entity's ID\r\n\t * \r\n\t * @return The current Entity ID\r\n\t */\r\n\tpublic int getEntityID() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Entity ID.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityID(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param world - the current world of the entity.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(World world) {\r\n\t\treturn handle.getEntityModifier(world).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t * \r\n\t * @param event - the packet event.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(PacketEvent event) {\r\n\t\treturn getEntity(event.getPlayer().getWorld());\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Animation.\r\n\t * <p>\r\n\t * Notes: animation ID\r\n\t * \r\n\t * @return The current Animation\r\n\t */\r\n\tpublic int getAnimation() {\r\n\t\treturn handle.getIntegers().read(1);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Animation.\r\n\t * \r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setAnimation(int value) {\r\n\t\thandle.getIntegers().write(1, value);\r\n\t}\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerAnimation.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerAnimation.java	(date 1564757846157)
+@@ -3,7 +3,7 @@
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.events.PacketEvent;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+ 
+Index: src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityVelocity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.java.packet.entity;\r\n\r\nimport com.comphenix.protocol.PacketType;\r\nimport com.comphenix.protocol.events.PacketContainer;\r\nimport com.comphenix.protocol.events.PacketEvent;\r\nimport net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;\r\nimport org.bukkit.World;\r\nimport org.bukkit.entity.Entity;\r\n\r\npublic class WrapperPlayServerEntityVelocity extends AbstractPacket {\r\n\tpublic static final PacketType TYPE =\r\n\t\t\tPacketType.Play.Server.ENTITY_VELOCITY;\r\n\r\n\tpublic WrapperPlayServerEntityVelocity() {\r\n\t\tsuper(new PacketContainer(TYPE), TYPE);\r\n\t\thandle.getModifier().writeDefaults();\r\n\t}\r\n\r\n\tpublic WrapperPlayServerEntityVelocity(PacketContainer packet) {\r\n\t\tsuper(packet, TYPE);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve Entity ID.\r\n\t * <p>\r\n\t * Notes: entity's ID\r\n\t *\r\n\t * @return The current Entity ID\r\n\t */\r\n\tpublic int getEntityID() {\r\n\t\treturn handle.getIntegers().read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Set Entity ID.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setEntityID(int value) {\r\n\t\thandle.getIntegers().write(0, value);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t *\r\n\t * @param world - the current world of the entity.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(World world) {\r\n\t\treturn handle.getEntityModifier(world).read(0);\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the entity of the painting that will be spawned.\r\n\t *\r\n\t * @param event - the packet event.\r\n\t * @return The spawned entity.\r\n\t */\r\n\tpublic Entity getEntity(PacketEvent event) {\r\n\t\treturn getEntity(event.getPlayer().getWorld());\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the velocity in the x axis.\r\n\t *\r\n\t * @return The current velocity X\r\n\t */\r\n\tpublic double getVelocityX() {\r\n\t\treturn handle.getIntegers().read(1) / 8000.0D;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the velocity in the x axis.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setVelocityX(double value) {\r\n\t\thandle.getIntegers().write(1, (int) (value * 8000.0D));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the velocity in the y axis.\r\n\t *\r\n\t * @return The current velocity y\r\n\t */\r\n\tpublic double getVelocityY() {\r\n\t\treturn handle.getIntegers().read(2) / 8000.0D;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the velocity in the y axis.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setVelocityY(double value) {\r\n\t\thandle.getIntegers().write(2, (int) (value * 8000.0D));\r\n\t}\r\n\r\n\t/**\r\n\t * Retrieve the velocity in the z axis.\r\n\t *\r\n\t * @return The current velocity z\r\n\t */\r\n\tpublic double getVelocityZ() {\r\n\t\treturn handle.getIntegers().read(3) / 8000.0D;\r\n\t}\r\n\r\n\t/**\r\n\t * Set the velocity in the z axis.\r\n\t *\r\n\t * @param value - new value.\r\n\t */\r\n\tpublic void setVelocityZ(double value) {\r\n\t\thandle.getIntegers().write(3, (int) (value * 8000.0D));\r\n\t}\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityVelocity.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/packet/entity/WrapperPlayServerEntityVelocity.java	(date 1564757845244)
+@@ -3,7 +3,7 @@
+ import com.comphenix.protocol.PacketType;
+ import com.comphenix.protocol.events.PacketContainer;
+ import com.comphenix.protocol.events.PacketEvent;
+-import net.gitcoder.api.java.packet.packetwrapper.AbstractPacket;
++import net.gitcoder.api.java.packet.AbstractPacket;
+ import org.bukkit.World;
+ import org.bukkit.entity.Entity;
+ 
+Index: src/main/java/net/gitcoder/api/java/utility/ItemUtil.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/utility/ItemUtil.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/utility/ItemUtil.java	(date 1564757846109)
+@@ -1,9 +1,10 @@
+-package net.gitcoder.api.java.utility;
++package net.gitcoder.api.bukkit.utility;
+ 
+ import com.mojang.authlib.GameProfile;
+ import com.mojang.authlib.properties.Property;
+ import lombok.Getter;
+ import lombok.Setter;
++import net.gitcoder.api.java.utility.ReflectionUtil;
+ import org.bukkit.Color;
+ import org.bukkit.Material;
+ import org.bukkit.configuration.ConfigurationSection;
+@@ -27,7 +28,7 @@
+  * <p>
+  * All right's is reserved.
+  */
+-public class ItemUtil {
++public final class ItemUtil {
+ 
+     @Setter
+     @Getter
+Index: src/main/java/net/gitcoder/api/bukkit/module/gui/PagedGui.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package net.gitcoder.api.bukkit.module.gui;\r\n\r\nimport com.google.common.collect.HashBasedTable;\r\nimport com.google.common.collect.Maps;\r\nimport com.google.common.collect.Table;\r\nimport lombok.Getter;\r\nimport lombok.Setter;\r\n\r\nimport net.gitcoder.api.bukkit.GitAPI;\r\nimport net.gitcoder.api.bukkit.module.gui.action.ClickAction;\r\nimport net.gitcoder.api.bukkit.module.gui.api.GuiAPI;\r\nimport net.gitcoder.api.bukkit.module.gui.item.GuiItem;\r\nimport net.gitcoder.api.bukkit.module.gui.listener.PagedGuiListener;\r\nimport net.gitcoder.api.java.utility.ItemUtil;\r\n\r\nimport org.bukkit.Bukkit;\r\nimport org.bukkit.Material;\r\nimport org.bukkit.entity.Player;\r\nimport org.bukkit.inventory.Inventory;\r\nimport org.bukkit.inventory.ItemStack;\r\n\r\nimport java.util.Collection;\r\n\r\n/**\r\n * Developed by James_TheMan.\r\n * You may not change this code or change copyright.\r\n * The author is responsible for this code.\r\n */\r\npublic abstract class PagedGui implements GuiAPI {\r\n\r\n    private static final ItemStack NEXT_PAGE = ItemUtil.newBuilder(Material.ARROW)\r\n            .setName(\"§aСледующая страница\")\r\n            .setLore(\"\",\r\n                    \"§7Нажмите для перехода на\",\r\n                    \"§7следующую страницу\")\r\n            .create();\r\n    private static final ItemStack PREV_PAGE = ItemUtil.newBuilder(Material.ARROW)\r\n            .setName(\"§cПредыдущая страница\")\r\n            .setLore(\"\",\r\n                    \"§7Нажмите для перехода на\",\r\n                    \"§7предыдущую страницу\")\r\n            .create();\r\n\r\n    @Getter\r\n    private Table<Integer, Integer, GuiItem> buttonTable = HashBasedTable.create();\r\n\r\n    private String name;\r\n\r\n    private int rows;\r\n    @Getter\r\n    private Player player;\r\n    @Getter\r\n    private Inventory inventory;\r\n\r\n    @Getter\r\n    @Setter\r\n    private int currentPage = 1;\r\n\r\n    /**\r\n     * Конструктор, который создает начальный иннвентарь.\r\n     *\r\n     * @param player - открывающий.\r\n     * @param name - имя инвентаря.\r\n     * @param rows - строки.\r\n     */\r\n    public PagedGui(Player player,\r\n                    String name,\r\n                    int rows) {\r\n\r\n        this.inventory = Bukkit.createInventory(null,  rows * 9, name);\r\n        this.player = player;\r\n        this.rows = rows * 9;\r\n        this.name = name;\r\n\r\n        PagedGuiListener pagedGuiListener = new PagedGuiListener(this);\r\n        Bukkit.getPluginManager().registerEvents(pagedGuiListener, GitAPI.getPlugin(GitAPI.class));\r\n    }\r\n\r\n    /**\r\n     * Подготовка инвентаря.\r\n     */\r\n    abstract void drawInventory();\r\n\r\n    /**\r\n     * Добавление кнопок в инвентарь.\r\n     * @param page - страница.\r\n     * @param slot - слот.\r\n     * @param itemStack - кнопка.\r\n     * @param clickAction - действие.\r\n     */\r\n    public void addItem(int page, int slot, ItemStack itemStack, ClickAction clickAction) {\r\n        buttonTable.put(page, slot, new GuiItem(slot, itemStack, clickAction));\r\n    }\r\n\r\n    @Override\r\n    public void prepareInventory() {\r\n        boolean hasNextPage = buttonTable.containsRow(currentPage + 1);\r\n        boolean hasPrevPage = currentPage > 1;\r\n\r\n        int lastRow = this.rows - 1;\r\n        int firstRow = lastRow - 8;\r\n\r\n        if (hasNextPage)\r\n            addItem(currentPage, lastRow, NEXT_PAGE, (player) -> openGui(currentPage + 1));\r\n        if (hasPrevPage)\r\n            addItem(currentPage, firstRow, PREV_PAGE,  player -> openGui(currentPage - 1));\r\n\r\n        for (GuiItem guiItem : getItems(currentPage)) {\r\n            int slot = guiItem.getSlot();\r\n\r\n            if (slot > inventory.getSize())\r\n                inventory = Bukkit.createInventory(null, getMaxSize(slot), name);\r\n\r\n            inventory.setItem(slot, guiItem.getItemStack());\r\n        }\r\n\r\n    }\r\n\r\n    @Override\r\n    public void clearInventory() {\r\n        this.inventory.clear();\r\n    }\r\n\r\n    @Override\r\n    public void clearButtons() {\r\n        buttonTable.clear();\r\n    }\r\n\r\n    @Override\r\n    public void openGui() {\r\n\r\n    }\r\n\r\n    public void openGui(int currentPage) {\r\n        this.currentPage = currentPage;\r\n\r\n        inventory.clear();\r\n\r\n        drawInventory();\r\n        prepareInventory();\r\n\r\n        player.openInventory(this.inventory);\r\n    }\r\n\r\n    public void openPagedGui() {\r\n        this.openGui(1);\r\n    }\r\n\r\n    private int getMaxSize(int slot) {\r\n        if (slot >= 0 && slot < 9) return 9;\r\n        else if (slot >= 9 && slot < 18) return 27;\r\n        else if (slot >= 18 && slot < 27) return 36;\r\n        else if (slot >= 27 && slot < 35) return 45;\r\n        else if (slot >= 35 && slot < 46) return 54;\r\n        else return 54;\r\n    }\r\n\r\n    private Collection<GuiItem> getItems(int page) {\r\n        return buttonTable\r\n                .rowMap()\r\n                .getOrDefault(page, Maps.newHashMap())\r\n                .values();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/net/gitcoder/api/bukkit/module/gui/PagedGui.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/module/gui/PagedGui.java	(date 1564757845087)
+@@ -11,7 +11,7 @@
+ import net.gitcoder.api.bukkit.module.gui.api.GuiAPI;
+ import net.gitcoder.api.bukkit.module.gui.item.GuiItem;
+ import net.gitcoder.api.bukkit.module.gui.listener.PagedGuiListener;
+-import net.gitcoder.api.java.utility.ItemUtil;
++import net.gitcoder.api.bukkit.utility.ItemUtil;
+ 
+ import org.bukkit.Bukkit;
+ import org.bukkit.Material;
+Index: src/main/java/net/gitcoder/api/java/utility/TagDataMapUtil.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/utility/TagDataMapUtil.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/utility/TagDataMapUtil.java	(date 1564757846216)
+@@ -1,10 +1,10 @@
+-package net.gitcoder.api.java.utility;
++package net.gitcoder.api.bukkit.utility;
+ 
+ import net.gitcoder.api.bukkit.module.tag.api.TagData;
+ 
+ import java.util.concurrent.ConcurrentHashMap;
+ 
+-public class TagDataMapUtil
++public final class TagDataMapUtil
+     extends ConcurrentHashMap<String, TagData> {
+ 
+     @Override
+Index: src/main/java/net/gitcoder/api/java/utility/FormatTimeUtil.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/utility/FormatTimeUtil.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/java/utility/FormatTime.java	(date 1564757846752)
+@@ -8,7 +8,7 @@
+  * <p>
+  * All right's is reserved.
+  */
+-public enum FormatTimeUtil {
++public enum FormatTime {
+ 
+     YEARS(" год", " года", " лет"),
+     MONTHS(" месяц", " месяца", " месяцев"),
+@@ -24,9 +24,9 @@
+     String two;
+     String three;
+ 
+-    FormatTimeUtil(String one,
+-                   String two,
+-                   String three) {
++    FormatTime(String one,
++               String two,
++               String three) {
+ 
+         this.one = one;
+         this.two = two;
+Index: src/main/java/net/gitcoder/api/java/utility/TeamTagUtil.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/utility/TeamTagUtil.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/utility/TeamTagUtil.java	(date 1564757845685)
+@@ -1,8 +1,8 @@
+-package net.gitcoder.api.java.utility;
++package net.gitcoder.api.bukkit.utility;
+ 
+ import org.bukkit.ChatColor;
+ 
+-public class TeamTagUtil {
++public final class TeamTagUtil {
+ 
+     public static String colorize(String input) {
+         return ChatColor.translateAlternateColorCodes('&', input);
+Index: src/main/java/ru/stonlex/api/packet/MessagingPacket.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/ru/stonlex/api/packet/MessagingPacket.java	(date 1564757845151)
++++ src/main/java/ru/stonlex/api/packet/MessagingPacket.java	(date 1564757845151)
+@@ -0,0 +1,10 @@
++package ru.stonlex.api.packet;
++
++/**
++ * @Author ItzStonlex.
++ * @VK https://vk.com/itzstonlex
++ * <p>
++ * (Created on 02.08.2019 18:55)
++ */
++public abstract class MessagingPacket {
++}
+Index: src/main/java/net/gitcoder/api/java/utility/ColorUtil.java
+===================================================================
+--- src/main/java/net/gitcoder/api/java/utility/ColorUtil.java	(revision ed2a4336c167e9ffd6d93d327cf774e2af19050c)
++++ src/main/java/net/gitcoder/api/bukkit/utility/ColorUtil.java	(date 1564757845194)
+@@ -1,6 +1,7 @@
+-package net.gitcoder.api.java.utility;
++package net.gitcoder.api.bukkit.utility;
+ 
+ import lombok.experimental.UtilityClass;
++import net.gitcoder.api.java.utility.StringUtil;
+ import org.bukkit.ChatColor;
+ 
+ import java.util.Arrays;
