@@ -1,5 +1,5 @@
 name: GitAPI
-author: GitCoder
+authors: [GitCoder, ItzStonlex]
 main: net.gitcoder.api.bukkit.GitAPI
 version: 1.0 Beta
 description: Творим добро!

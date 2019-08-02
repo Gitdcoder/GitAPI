@@ -102,7 +102,7 @@ public class SQLGroupHandler {
         return gitAPI.getDatabase().executeQuery(EXECUTE_QUERY_PLAYER_GROUP, resultSet -> {
 
             if (resultSet.next()) {
-                groups.getOrDefault(resultSet.getString("Group"), DEFAULT);
+                return groups.getOrDefault(resultSet.getString("Group"), DEFAULT);
             }
 
             return DEFAULT;

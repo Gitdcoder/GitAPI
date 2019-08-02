@@ -90,4 +90,8 @@ public class Group {
     public boolean hasPermission(String permission) {
         return PERMISSIONS.contains(permission);
     }
+
+    public boolean isDonate() {
+        return level > 0;
+    }
 }

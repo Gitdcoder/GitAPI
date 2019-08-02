@@ -3,6 +3,7 @@ package net.gitcoder.api.bukkit.gamer;
 import net.gitcoder.api.bukkit.gamer.humans.Gamer;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,5 +43,9 @@ public class GamerStorage {
      */
     public Gamer getGamer(String name) {
         return gamers.get(name.toLowerCase());
+    }
+
+    public Collection<Gamer> getGamers() {
+        return gamers.values();
     }
 }

@@ -1,5 +1,8 @@
 package net.gitcoder.api.bukkit.game.type;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * @Author GitCoder.
  * <p>
@@ -8,13 +11,15 @@ package net.gitcoder.api.bukkit.game.type;
  * <p>
  * All right's is reserved.
  */
+
+@Getter
+@RequiredArgsConstructor
 public enum GameType {
 
-    SWS(),
-    SWT(),
-    BWS(),
-    BWT(),
-    EWT(),
+    SW("SkyWars"),
+    BW("BedWars"),
+    EW("EggWars"),
+    SM("Smasher");
 
-
+    private final String name;
 }

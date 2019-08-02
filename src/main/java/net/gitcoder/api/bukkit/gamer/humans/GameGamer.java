@@ -1,5 +1,11 @@
 package net.gitcoder.api.bukkit.gamer.humans;
 
+import net.gitcoder.api.bukkit.game.perk.GamePerk;
+import net.gitcoder.api.bukkit.game.type.GameType;
+import net.gitcoder.api.bukkit.gamer.perk.SQLPerkHandler;
+
+import java.util.List;
+
 /**
  * @Author GitCoder.
  * <p>
@@ -20,4 +26,16 @@ public interface GameGamer {
      * @return - да или нет.
      */
     boolean spectator();
+
+    void setPurchasePerks(List<GamePerk> gamePerks);
+
+    void setPerk(GamePerk gamePerk);
+
+    void selectPerk(GamePerk gamePerk);
+
+    boolean selectedPerk(GamePerk gamePerk);
+
+    boolean hasPerk(GamePerk gamePerk);
+
+    SQLPerkHandler getSQLPerkHandler();
 }

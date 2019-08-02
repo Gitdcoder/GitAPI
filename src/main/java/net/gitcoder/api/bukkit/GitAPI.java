@@ -25,6 +25,8 @@ public class GitAPI extends JavaPlugin {
             .database("database")
             .create();
 
+    public Management MANAGEMENT = new Management();
+
     /**
      * Override method, triggered when the server start.
      */

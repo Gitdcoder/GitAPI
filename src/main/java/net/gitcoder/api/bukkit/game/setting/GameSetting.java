@@ -1,5 +1,6 @@
 package net.gitcoder.api.bukkit.game.setting;
 
+import net.gitcoder.api.bukkit.game.type.GameType;
 import net.gitcoder.api.java.utility.ItemUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +15,8 @@ import org.bukkit.inventory.ItemStack;
  */
 @SuppressWarnings("all")
 public class GameSetting {
+
+    public GameType GAME_TYPE;
 
     public final ItemStack EXIT_ITEM;
     public final ItemStack SHOP_ITEM;

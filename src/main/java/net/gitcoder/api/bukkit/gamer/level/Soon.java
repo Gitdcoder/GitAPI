@@ -1,6 +1,4 @@
-package net.gitcoder.api.bukkit.game;
-
-import org.bukkit.entity.Player;
+package net.gitcoder.api.bukkit.gamer.level;
 
 /**
  * @Author GitCoder.
@@ -10,10 +8,5 @@ import org.bukkit.entity.Player;
  * <p>
  * All right's is reserved.
  */
-class SpectatorManager  {
-
-    public void setSpectator(Player player) {
-
-    }
-
+public class Soon {
 }
