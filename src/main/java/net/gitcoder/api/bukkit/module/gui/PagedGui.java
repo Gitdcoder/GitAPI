@@ -42,7 +42,7 @@ public abstract class PagedGui implements GuiAPI {
             .create();
 
     @Getter
-    private Table<Integer, Integer, GuiItem> buttonTable = HashBasedTable.create();
+    private final Table<Integer, Integer, GuiItem> buttonTable = HashBasedTable.create();
 
     private String name;
 

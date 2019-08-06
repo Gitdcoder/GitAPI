@@ -11,7 +11,7 @@ public class ProtocolTags {
     private static TagManager tagManager = new TagManager();
 
     public static void setTag(Player player) {
-        Group group = GitAPI.MANAGEMENT.GAMER_STORAGE.getGamer(player).getGroup();
+        Group group = GitAPI.MANAGEMENT.getGamer(player).getGroup();
 
         tagManager.setTag(player, group.getGroup(),
                     TeamTagUtil.colorize(group.getPrefix()), TeamTagUtil.colorize(group.getSuffix()));

@@ -2,6 +2,7 @@ package net.gitcoder.api.bukkit;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import lombok.Getter;
+import net.gitcoder.api.bukkit.checker.AFKChecker;
 import net.gitcoder.api.bukkit.gamer.listener.GamerListener;
 import net.gitcoder.api.bukkit.module.entity.listeners.FakeEntityClickListener;
 import net.gitcoder.api.bukkit.module.tag.listeners.PlayerTagListener;
@@ -40,6 +41,7 @@ public class GitAPI extends JavaPlugin {
     public void onEnable() {
         Bukkit.getPluginManager().registerEvents(new GamerListener(), this);
         Bukkit.getPluginManager().registerEvents(new PlayerTagListener(), this);
+        Bukkit.getPluginManager().registerEvents(new AFKChecker(), this);
 
         registerProtocolListener();
         readPackets();
@@ -56,7 +58,7 @@ public class GitAPI extends JavaPlugin {
          *
          * Обновление глобального онлайна
          */
-        MANAGEMENT.PACKET_PROTOCOL.readPacket(0, dataInput -> MANAGEMENT.GLOBAL_ONLINE = dataInput.readInt());
+        MANAGEMENT.packetProtocol.readPacket(0, dataInput -> MANAGEMENT.GLOBAL_ONLINE = dataInput.readInt());
 
 
         /*
@@ -64,8 +66,8 @@ public class GitAPI extends JavaPlugin {
          *
          * Обновление данных серверов бомжи
          */
-        MANAGEMENT.PACKET_PROTOCOL.readPacket(1, dataInput -> {
-            MANAGEMENT.PROXY_SERVERS_MAP.clear();
+        MANAGEMENT.packetProtocol.readPacket(1, dataInput -> {
+            MANAGEMENT.proxyServersMap.clear();
 
             int serversCount = dataInput.readInt();
 
@@ -80,7 +82,7 @@ public class GitAPI extends JavaPlugin {
                 GitServer gitServer = new GitServer(serverName, serverMotd, serverAddress,
                                                     playersCount, serverPort);
 
-                MANAGEMENT.PROXY_SERVERS_MAP.put(serverName, gitServer);
+                MANAGEMENT.proxyServersMap.put(serverName, gitServer);
             }
         });
     }

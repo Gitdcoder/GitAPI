@@ -26,7 +26,7 @@ public class PacketSender {
      * @param messagingPacket - Пакет
      */
     public void sendPacket(MessagingPacket messagingPacket) {
-        SERVER_SENDER.sendPluginMessage(GitAPI.getInstance(), GitAPI.MANAGEMENT.PACKET_PROTOCOL.PACKER_CHANNEL_NAME, messagingPacket.getBytes());
+        SERVER_SENDER.sendPluginMessage(GitAPI.getInstance(), GitAPI.MANAGEMENT.packetProtocol.PACKER_CHANNEL_NAME, messagingPacket.getBytes());
     }
 
     /**

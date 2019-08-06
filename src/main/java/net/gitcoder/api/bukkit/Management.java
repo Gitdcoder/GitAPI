@@ -1,13 +1,13 @@
 package net.gitcoder.api.bukkit;
 
-import net.gitcoder.api.bukkit.game.perk.PerkManager;
 import net.gitcoder.api.bukkit.game.setting.GameSettings;
 import net.gitcoder.api.bukkit.gamer.GamerStorage;
-import net.gitcoder.api.bukkit.gamer.humans.Gamer;
-import net.gitcoder.api.bukkit.gamer.perk.SQLPerkHandler;
+import net.gitcoder.api.bukkit.gamer.human.HumanGamer;
+import net.gitcoder.api.bukkit.handler.GroupSQLHandler;
+import net.gitcoder.api.bukkit.module.store.handler.StoreSQLHandler;
+import net.gitcoder.api.bukkit.module.store.registry.RegistryStore;
 import net.gitcoder.api.bukkit.module.tag.api.TagManager;
 import net.gitcoder.api.bukkit.server.GitServer;
-import net.gitcoder.api.java.mysql.handler.SQLGroupHandler;
 import org.bukkit.entity.Player;
 import ru.stonlex.api.packet.protocol.bukkit.PacketProtocol;
 
@@ -24,21 +24,40 @@ import java.util.Map;
  */
 public final class Management {
 
-    public final GamerStorage GAMER_STORAGE = new GamerStorage();
+    public final GamerStorage gamerStorage = new GamerStorage();
 
-    public final SQLGroupHandler SQL_GROUP_HANDLER = new SQLGroupHandler(GitAPI.getInstance());
+    public final GroupSQLHandler groupSQLHandler = new GroupSQLHandler();
 
-    public final TagManager TAG_MANAGER = new TagManager();
+    public final TagManager tagManager = new TagManager();
 
-    public final GameSettings GAME_SETTINGS = new GameSettings();
+    public final GameSettings gameSettings = new GameSettings();
 
-    public final SQLPerkHandler SQL_PERK_HANDLER = new SQLPerkHandler();
+    public final StoreSQLHandler storeSQLHandler = new StoreSQLHandler();
 
-    public final PerkManager PERK_MANAGER = new PerkManager();
+    public final RegistryStore registryStore = new RegistryStore();
 
-    public final PacketProtocol PACKET_PROTOCOL = new PacketProtocol();
+    public final PacketProtocol packetProtocol = new PacketProtocol();
 
-    public final Map<String, GitServer> PROXY_SERVERS_MAP = new HashMap<>();
+    public final Map<String, GitServer> proxyServersMap = new HashMap<>();
 
     public int GLOBAL_ONLINE = 0;
+
+    /**
+     * Получение геймера из хранилищаю
+     * @param name - имя игрока.
+     * @return - Gamer.
+     */
+    public HumanGamer getGamer(String name) {
+        return gamerStorage.getGamer(name);
+
+    }
+
+    /**
+     * Получение геймера из хранилищаю
+     * @param player - игрок.
+     * @return - Gamer.
+     */
+    public HumanGamer getGamer(Player player) {
+        return gamerStorage.getGamer(player.getName());
+    }
 }

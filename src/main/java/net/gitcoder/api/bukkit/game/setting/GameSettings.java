@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
  * <p>
  * All right's is reserved.
  */
-public final class GameSettings {
+public class GameSettings {
 
     public final ItemStack EXIT_ITEM = ItemUtil.newBuilder(Material.SLIME_BALL).setName("§6Выход в лобби").create();
     public final ItemStack SHOP_ITEM = ItemUtil.newBuilder(Material.CHEST).setName("§6Магазин с перками и китами").create();

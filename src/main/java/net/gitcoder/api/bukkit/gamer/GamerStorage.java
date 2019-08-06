@@ -1,6 +1,6 @@
 package net.gitcoder.api.bukkit.gamer;
 
-import net.gitcoder.api.bukkit.gamer.humans.Gamer;
+import net.gitcoder.api.bukkit.gamer.human.HumanGamer;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public class GamerStorage {
 
-    private final Map<String, Gamer> gamers = new HashMap<>();
+    private final Map<String, HumanGamer> gamers = new HashMap<>();
 
     /**
      * Загрузка геймера в кеш.
@@ -25,13 +25,13 @@ public class GamerStorage {
      */
     public void loadGamer(Player player) {
         final String name = player.getName().toLowerCase();
-        final Gamer gamer = new GamerImpl(player.getName());
+        final HumanGamer gamer = new GamerImpl(player.getName());
 
         gamers.put(name, gamer);
     }
 
     public void loadGamer(String player) {
-        final Gamer gamer = new GamerImpl(player);
+        final HumanGamer gamer = new GamerImpl(player);
 
         gamers.put(player.toLowerCase(), gamer);
     }
@@ -41,20 +41,11 @@ public class GamerStorage {
      * @param name - имя игрока.
      * @return - геймера.
      */
-    public Gamer getGamer(String name) {
+    public HumanGamer getGamer(String name) {
         return gamers.get(name.toLowerCase());
     }
 
-    /**
-     * Получение игрока из кеша.
-     * @param player - имя игрока.
-     * @return - геймера.
-     */
-    public Gamer getGamer(Player player) {
-        return gamers.get(player.getName().toLowerCase());
-    }
-
-    public Collection<Gamer> getGamers() {
+    public Collection<HumanGamer> getGamers() {
         return gamers.values();
     }
 }

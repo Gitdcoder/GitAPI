@@ -3,7 +3,8 @@ package net.gitcoder.api.bukkit.gamer.listener;
 import net.gitcoder.api.bukkit.GitAPI;
 import net.gitcoder.api.bukkit.Management;
 import net.gitcoder.api.bukkit.gamer.GamerStorage;
-import net.gitcoder.api.bukkit.gamer.humans.Gamer;
+import net.gitcoder.api.bukkit.gamer.human.DefaultGamer;
+import net.gitcoder.api.bukkit.gamer.human.HumanGamer;
 import net.gitcoder.api.java.utility.LoggerUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -21,12 +22,11 @@ import org.bukkit.event.player.PlayerJoinEvent;
  */
 public class GamerListener implements Listener {
 
-    private final GitAPI gitAPI = GitAPI.getInstance();
-    private final Management MANAGEMENT = gitAPI.MANAGEMENT;
+    private final Management MANAGEMENT = GitAPI.MANAGEMENT;
 
     @EventHandler
     public void onPreLogin(AsyncPlayerPreLoginEvent event) {
-        final GamerStorage gamerStorage = MANAGEMENT.GAMER_STORAGE;
+        final GamerStorage gamerStorage = MANAGEMENT.gamerStorage;
 
         gamerStorage.loadGamer(event.getName());
     }
@@ -35,7 +35,7 @@ public class GamerListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        Gamer gamer = MANAGEMENT.getGamer(player);
+        HumanGamer gamer = MANAGEMENT.getGamer(player);
 
         gamer.setPlayer(player);
         gamer.setGamerPermissible(player);

@@ -1,8 +1,8 @@
 package net.gitcoder.api.bukkit.module.tag.api;
 
 import com.google.common.collect.Sets;
-import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;
 import net.gitcoder.api.bukkit.utility.TeamTagUtil;
+import net.gitcoder.api.java.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@SuppressWarnings("all")
 public class TagPacket {
 
     private WrapperPlayServerScoreboardTeam packet;

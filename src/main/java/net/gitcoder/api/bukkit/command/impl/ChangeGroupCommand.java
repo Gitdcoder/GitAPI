@@ -1,7 +1,7 @@
 package net.gitcoder.api.bukkit.command.impl;
 
 import net.gitcoder.api.bukkit.command.BaseCommand;
-import net.gitcoder.api.bukkit.gamer.humans.Gamer;
+import net.gitcoder.api.bukkit.gamer.human.DefaultGamer;
 import org.bukkit.entity.Player;
 
 /**
@@ -19,7 +19,7 @@ public class ChangeGroupCommand extends BaseCommand {
     }
 
     @Override
-    public void executeCommand(Player player, Gamer gamer, String[] strings) {
+    public void executeCommand(Player player, DefaultGamer gamer, String[] strings) {
 
     }
 }

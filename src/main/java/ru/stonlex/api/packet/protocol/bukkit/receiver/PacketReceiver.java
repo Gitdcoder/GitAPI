@@ -25,7 +25,7 @@ public class PacketReceiver implements PluginMessageListener {
 
     @Override
     public void onPluginMessageReceived(String channel, Player receiver, byte[] bytes) {
-        if (!channel.equals(GitAPI.MANAGEMENT.PACKET_PROTOCOL.PACKER_CHANNEL_NAME)) {
+        if (!channel.equals(GitAPI.MANAGEMENT.packetProtocol.PACKER_CHANNEL_NAME)) {
             return;
         }
 

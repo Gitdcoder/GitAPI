@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import java.util.Collection;
 import java.util.Map;
 
-@SuppressWarnings("all")
 public class TagAppiler {
 
     private static TagManager manager;

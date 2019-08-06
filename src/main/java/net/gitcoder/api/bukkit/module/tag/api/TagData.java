@@ -1,14 +1,13 @@
 package net.gitcoder.api.bukkit.module.tag.api;
 
-import net.gitcoder.api.bukkit.Management;
-import net.gitcoder.api.java.packet.packetwrapper.WrapperPlayServerScoreboardTeam;
+import net.gitcoder.api.bukkit.GitAPI;
 import net.gitcoder.api.bukkit.utility.TeamTagUtil;
+import net.gitcoder.api.java.packet.scoreboard.WrapperPlayServerScoreboardTeam;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
 
-@SuppressWarnings("all")
 public class TagData {
 
     private TagPacket packet;
@@ -42,7 +41,7 @@ public class TagData {
         getPacket().removePlayer(player, this);
 
         if(getPlayers().size() == 0) {
-            Management.TAG_MANAGER.removeTeam(this);
+            GitAPI.MANAGEMENT.tagManager.removeTeam(this);
         }
     }
 

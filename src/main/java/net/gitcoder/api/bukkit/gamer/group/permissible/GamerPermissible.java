@@ -1,6 +1,6 @@
 package net.gitcoder.api.bukkit.gamer.group.permissible;
 
-import net.gitcoder.api.bukkit.gamer.humans.Gamer;
+import net.gitcoder.api.bukkit.gamer.human.DefaultGamer;
 import net.gitcoder.api.bukkit.gamer.group.Group;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftHumanEntity;
 import org.bukkit.entity.Player;
@@ -18,14 +18,14 @@ import java.lang.reflect.Field;
  */
 public class GamerPermissible extends PermissibleBase {
 
-    private final Gamer gamer;
+    private final DefaultGamer gamer;
 
     /**
      * Выдача прав игроку.
      * @param player - игрок.
      * @param gamer - геймер.
      */
-    public GamerPermissible(Player player, Gamer gamer) {
+    public GamerPermissible(Player player, DefaultGamer gamer) {
         super(player);
 
         this.gamer = gamer;

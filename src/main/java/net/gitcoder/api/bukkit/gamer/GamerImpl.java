@@ -1,20 +1,16 @@
 package net.gitcoder.api.bukkit.gamer;
 
-import lombok.Getter;
 import net.gitcoder.api.bukkit.GitAPI;
-import net.gitcoder.api.bukkit.game.perk.GamePerk;
 import net.gitcoder.api.bukkit.gamer.group.Group;
 import net.gitcoder.api.bukkit.gamer.group.permissible.GamerPermissible;
-import net.gitcoder.api.bukkit.gamer.humans.Gamer;
-import net.gitcoder.api.bukkit.gamer.humans.SpectatorHumanGamer;
-import net.gitcoder.api.bukkit.gamer.perk.SQLPerkHandler;
-import net.gitcoder.api.java.mysql.handler.SQLGroupHandler;
-import net.gitcoder.api.java.mysql.handler.SQLMoneyHandler;
+import net.gitcoder.api.bukkit.gamer.human.HumanGamer;
+import net.gitcoder.api.bukkit.gamer.level.ILeveling;
+import net.gitcoder.api.bukkit.handler.GroupSQLHandler;
+import net.gitcoder.api.bukkit.handler.MoneySQLHandler;
+import net.gitcoder.api.bukkit.module.store.StoreItem;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,73 +21,34 @@ import java.util.Map;
  * <p>
  * All right's is reserved.
  */
-@Getter
-public class GamerImpl implements Gamer, SpectatorHumanGamer {
-
-    private final GitAPI gitAPI = GitAPI.getInstance();
-
-    private GamerPermissible gamerPermissible;
+public class GamerImpl implements HumanGamer {
 
     private Group group;
+
     private Player player;
 
     private final String name;
 
     private final Map<String, Object> property = new HashMap<>();
 
-    private GamePerk gamePerk;
-
     private boolean spectator = false;
 
-    private List<GamePerk> gamePerks = new ArrayList<>();
+    private final GroupSQLHandler GROUP_SQL_HANDLER = GitAPI.MANAGEMENT.groupSQLHandler;
+
+    private final MoneySQLHandler MONEY_SQL_HANDLER;
 
     /**
      * Конструктор, для вызова нового юзера.
+     *
      * @param name - имя игрока.
      */
-    GamerImpl(String name)  {
+    GamerImpl(String name) {
         this.name = name;
 
-        this.group = getSQLGroupHandler().getPlayerGroup(name);
-    }
+        this.group = GROUP_SQL_HANDLER.getPlayerGroup(name);
 
-    @Override
-    public void changeGroup(Group group) {
-        this.group = group;
-    }
+        MONEY_SQL_HANDLER = new MoneySQLHandler();
 
-    @Override
-    public void removeSpectator() {
-        spectator = false;
-    }
-
-    @Override
-    public void redirect(String server) {
-
-    }
-
-    @Override
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    @Override
-    public void selectPerk(GamePerk gamePerk) {
-        this.gamePerk = gamePerk;
-
-        final String perkName = gamePerk.getPerkName();
-
-        getSQLPerkHandler().selectPerk(name.toLowerCase(), perkName);
-    }
-
-    @Override
-    public void setPurchasePerks(List<GamePerk> gamePerks) {
-        this.gamePerks = gamePerks;
-    }
-
-    @Override
-    public void setPerk(GamePerk gamePerk) {
-        this.gamePerk = gamePerk;
     }
 
     @Override
@@ -100,18 +57,53 @@ public class GamerImpl implements Gamer, SpectatorHumanGamer {
     }
 
     @Override
+    public void removeSpectator() {
+        this.spectator = false;
+    }
+
+    @Override
+    public boolean spectator() {
+        return spectator;
+    }
+
+    @Override
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
+    @Override
+    public void changeGroup(Group group) {
+        GROUP_SQL_HANDLER.changeGroup(this, group);
+    }
+
+    @Override
     public void setGamerPermissible(Player player) {
-        this.gamerPermissible = new GamerPermissible(player, this);
+        new GamerPermissible(player, this);
     }
 
     @Override
-    public String getName() {
-        return this.player.getName();
+    public void changeMoney(int money) {
+
     }
 
     @Override
-    public Player getPlayer() {
-        return this.player;
+    public int getMoney() {
+        return 0;
+    }
+
+    @Override
+    public int getMoon() {
+        return 0;
+    }
+
+    @Override
+    public int getExp() {
+        return (int) property.get("EXP");
+    }
+
+    @Override
+    public int getLevel() {
+        return (int) ILeveling.getLevel(this.getExp());
     }
 
     @Override
@@ -120,32 +112,37 @@ public class GamerImpl implements Gamer, SpectatorHumanGamer {
     }
 
     @Override
-    public boolean spectator() {
-        return this.spectator;
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 
     @Override
-    public boolean hasPerk(GamePerk gamePerk) {
-        return gamePerks.contains(gamePerk);
+    public String getName() {
+        return this.name;
     }
 
     @Override
-    public boolean selectedPerk(GamePerk gamePerk) {
-        return this.gamePerk.equals(gamePerk);
+    public Player getPlayer() {
+        return this.player;
     }
 
     @Override
-    public SQLMoneyHandler getSQLMoneyHandler() {
-        return (SQLMoneyHandler) property.computeIfAbsent("SQL-MONEY", field -> new SQLMoneyHandler());
+    public void redirect(String server) {
+
     }
 
     @Override
-    public SQLGroupHandler getSQLGroupHandler() {
-        return gitAPI.MANAGEMENT.SQL_GROUP_HANDLER;
+    public void itemIsBought(StoreItem storeItem) {
+
     }
 
     @Override
-    public SQLPerkHandler getSQLPerkHandler() {
-        return gitAPI.MANAGEMENT.SQL_PERK_HANDLER;
+    public void itemIsSelected(StoreItem storeItem) {
+
+    }
+
+    @Override
+    public boolean itemCanBuy(StoreItem storeItem) {
+        return false;
     }
 }

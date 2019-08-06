@@ -1,7 +1,9 @@
 package net.gitcoder.api.bukkit.module.gui;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.Getter;
 import net.gitcoder.api.bukkit.GitAPI;
+import net.gitcoder.api.bukkit.gamer.human.HumanGamer;
 import net.gitcoder.api.bukkit.module.gui.action.ClickAction;
 import net.gitcoder.api.bukkit.module.gui.api.GuiAPI;
 import net.gitcoder.api.bukkit.module.gui.item.GuiItem;
@@ -25,13 +27,15 @@ import java.util.Map;
  */
 public abstract class Gui implements GuiAPI {
 
-    private final Map<Integer, GuiItem> cache = new HashMap<>();
+    private final TIntObjectHashMap<GuiItem> guiItemTIntObjectHashMap = new TIntObjectHashMap<>();
 
     @Getter
     private Inventory inventory;
 
     @Getter
     public Player player;
+
+    public HumanGamer gamer;
 
     /**
      * Конструктор, который создает начальный иннвентарь.
@@ -46,6 +50,8 @@ public abstract class Gui implements GuiAPI {
 
         this.inventory = Bukkit.createInventory(null,  rows * 9, name);
         this.player = player;
+
+        GitAPI.MANAGEMENT.getGamer(player);
 
         GuiListener guiListener = new GuiListener(this);
         Bukkit.getPluginManager().registerEvents(guiListener, GitAPI.getInstance());
@@ -64,7 +70,7 @@ public abstract class Gui implements GuiAPI {
      * @param clickAction - действие.
      */
     public void addItem(int slot, ItemStack itemStack, ClickAction clickAction) {
-        cache.put(slot, new GuiItem(slot, itemStack, clickAction));
+        guiItemTIntObjectHashMap.put(slot, new GuiItem(slot, itemStack, clickAction));
     }
 
     @Override
@@ -81,7 +87,7 @@ public abstract class Gui implements GuiAPI {
 
     @Override
     public void clearButtons() {
-        cache.clear();
+        guiItemTIntObjectHashMap.clear();
     }
 
     @Override
@@ -93,10 +99,11 @@ public abstract class Gui implements GuiAPI {
     }
 
     private Collection<GuiItem> getItems() {
-        return cache.values();
+        return guiItemTIntObjectHashMap.valueCollection();
     }
 
     public GuiItem getGuiItem(int slot) {
-        return cache.get(slot);
+        return guiItemTIntObjectHashMap.get(slot);
     }
+
 }

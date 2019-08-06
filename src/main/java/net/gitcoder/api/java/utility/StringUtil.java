@@ -70,7 +70,7 @@ public class StringUtil {
         }
     }
 
-    public String formatTime(long ms, FormatTime formatTimeUtil) {
+    public String formatTime(long ms, FormatUtil formatTimeUtil) {
         if (ms % 100L > 10L && ms % 100L < 15L) {
             return ms + formatTimeUtil.three;
         } else {
@@ -109,11 +109,11 @@ public class StringUtil {
 
         StringBuilder builder = new StringBuilder();
 
-        if (w > 0) builder.append(formatTime(w, FormatTime.WEEK)).append(" ");
-        if (d > 0) builder.append(formatTime(d, FormatTime.DAYS)).append(" ");
-        if (h > 0) builder.append(formatTime(h, FormatTime.HOURS)).append(" ");
-        if (m > 0) builder.append(formatTime(m, FormatTime.MINUTES)).append(" ");
-        if (s > 0) builder.append(formatTime(s, FormatTime.SECONDS)).append(" ");
+        if (w > 0) builder.append(formatTime(w, FormatUtil.WEEK)).append(" ");
+        if (d > 0) builder.append(formatTime(d, FormatUtil.DAYS)).append(" ");
+        if (h > 0) builder.append(formatTime(h, FormatUtil.HOURS)).append(" ");
+        if (m > 0) builder.append(formatTime(m, FormatUtil.MINUTES)).append(" ");
+        if (s > 0) builder.append(formatTime(s, FormatUtil.SECONDS)).append(" ");
 
         return builder.toString();
     }
@@ -236,19 +236,19 @@ public class StringUtil {
         long days = 0L;
         long i;
         if(seconds >= 60L) {
-            i = (long)((int)(seconds / 60L));
+            i = (int)(seconds / 60L);
             minutes = i;
             seconds %= 60L;
         }
 
         if(minutes >= 60L) {
-            i = (long)((int)(minutes / 60L));
+            i = (int)(minutes / 60L);
             hours = i;
             minutes %= 60L;
         }
 
         if(hours >= 24L) {
-            i = (long)((int)(hours / 24L));
+            i = (int)(hours / 24L);
             days = i;
             hours %= 24L;
         }

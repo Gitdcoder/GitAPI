@@ -1,8 +1,7 @@
 package net.gitcoder.api.bukkit.command;
 
 import net.gitcoder.api.bukkit.GitAPI;
-import net.gitcoder.api.bukkit.Management;
-import net.gitcoder.api.bukkit.gamer.humans.Gamer;
+import net.gitcoder.api.bukkit.gamer.human.DefaultGamer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,7 +21,7 @@ public abstract class BaseCommand extends Command implements CommandExecutor {
         super(name);
     }
 
-    public abstract void executeCommand(Player player, Gamer gamer, String[] strings);
+    public abstract void executeCommand(Player player, DefaultGamer gamer, String[] strings);
 
     @Override
     public boolean execute(CommandSender commandSender, String s, String[] strings) {
@@ -32,7 +31,7 @@ public abstract class BaseCommand extends Command implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         final Player player = (Player) commandSender;
-        final Gamer gamer = GitAPI.MANAGEMENT.GAMER_STORAGE.getGamer(player.getName());
+        final DefaultGamer gamer = GitAPI.MANAGEMENT.getGamer(player.getName());
 
         executeCommand(player, gamer, strings);
         return false;

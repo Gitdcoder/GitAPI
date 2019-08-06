@@ -1,15 +1,17 @@
 package net.gitcoder.api.bukkit.game;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
 import lombok.Getter;
 import lombok.NonNull;
 import net.gitcoder.api.bukkit.GitAPI;
 import net.gitcoder.api.bukkit.Management;
 import net.gitcoder.api.bukkit.game.announcer.GameAnnouncer;
-import net.gitcoder.api.bukkit.game.perk.GamePerk;
 import net.gitcoder.api.bukkit.game.setting.GameSettings;
 import net.gitcoder.api.bukkit.game.type.GameState;
 import net.gitcoder.api.bukkit.game.type.GameType;
-import net.gitcoder.api.bukkit.gamer.humans.Gamer;
+import net.gitcoder.api.bukkit.gamer.human.DefaultGamer;
+import net.gitcoder.api.bukkit.gamer.human.GameGamer;
+import net.gitcoder.api.bukkit.gamer.human.HumanGamer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,21 +36,18 @@ import java.util.stream.Collectors;
  */
 public abstract class Game extends GameAnnouncer implements Listener {
 
-    protected final Management MANAGEMENT = GitAPI.MANAGEMENT;
+    private final Management MANAGEMENT = GitAPI.MANAGEMENT;
 
-    protected final GameSettings GAME_SETTINGS = MANAGEMENT.GAME_SETTINGS;
+    public final GameSettings GAME_SETTINGS = MANAGEMENT.gameSettings;
 
-
-    private final Map<Integer, Listener> listenerMap = new HashMap<>();
-
+    private final TIntObjectHashMap<Listener> listenerTIntObjectHashMap = new TIntObjectHashMap<>();
 
     @Getter
-    private final List<Gamer> alivePlayers = new ArrayList<>();
+    private final List<DefaultGamer> alivePlayers = new ArrayList<>();
 
-
-    private final SpectatorManager spectatorManager = new SpectatorManager();
-    private final GameState gameState = GameState.WAITING;
-    private final PluginManager pluginManager = Bukkit.getPluginManager();
+    private SpectatorManager spectatorManager = new SpectatorManager();
+    private GameState gameState = GameState.WAITING;
+    private PluginManager pluginManager = Bukkit.getPluginManager();
 
     /**
      * Конструктор, устанавливает игру,
@@ -57,11 +56,13 @@ public abstract class Game extends GameAnnouncer implements Listener {
      * @param gameType - тип игры.
      * @param players - количество людей.
      */
-    public Game(GameType gameType, int players) {
+    public Game(GameType gameType,
+                int players) {
 
         GAME_SETTINGS.GAME_TYPE = gameType;
 
         GAME_SETTINGS.MAX_PLAYERS_COUNT = players;
+
     }
 
     /**
@@ -109,7 +110,7 @@ public abstract class Game extends GameAnnouncer implements Listener {
 
         pluginManager.registerEvents(event, GitAPI.getInstance());
 
-        listenerMap.put(id, event);
+        listenerTIntObjectHashMap.put(id, event);
     }
 
     /**
@@ -117,21 +118,21 @@ public abstract class Game extends GameAnnouncer implements Listener {
      * @param id - ид.
      */
     public void unRegisterListener(Integer id) {
-        HandlerList.unregisterAll(listenerMap.get(id));
+        HandlerList.unregisterAll(listenerTIntObjectHashMap.get(id));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onAsyncPreLogin(AsyncPlayerPreLoginEvent event) {
         final int online = Bukkit.getOnlinePlayers().size();
-        final int maxOnline = MANAGEMENT.GAME_SETTINGS.MAX_PLAYERS_COUNT;
+        final int maxOnline = MANAGEMENT.gameSettings.MAX_PLAYERS_COUNT;
 
-        Gamer gamer = MANAGEMENT.GAMER_STORAGE.getGamer(event.getName());
+        HumanGamer gamer = MANAGEMENT.getGamer(event.getName());
 
         if (gameState.equals(GameState.STARTING)) {
-            List<Gamer> gamers = new ArrayList<>();
+            List<HumanGamer> gamers = new ArrayList<>();
 
             if (online == maxOnline && gamer.getGroup().isDonate()) {
-                for (Gamer random : MANAGEMENT.GAMER_STORAGE.getGamers()) {
+                for (HumanGamer random : MANAGEMENT.gamerStorage.getGamers()) {
                     if (random.getGroup().getLevel() < gamer.getGroup().getLevel()) {
                         gamers.add(random);
                     }
@@ -141,7 +142,8 @@ public abstract class Game extends GameAnnouncer implements Listener {
                 gamer.getPlayer().sendMessage("§cАрена на данной игре начинается...");
             }
 
-            final Gamer randomGamer = gamers.stream().
+            final HumanGamer randomGamer = gamers.
+                    stream().
                     sorted(Comparator.comparing(sortedGamer -> sortedGamer.getGroup().getLevel())).
                     collect(Collectors.toList()).get(0);
 
@@ -156,26 +158,21 @@ public abstract class Game extends GameAnnouncer implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final Gamer gamer = MANAGEMENT.GAMER_STORAGE.getGamer(player);
+        final GameGamer gamer = MANAGEMENT.getGamer(player);
 
         if (gameState.equals(GameState.GAME)) {
             spectatorManager.setSpectator(player);
 
             player.sendMessage("§cИгра на данной арене уже началась! Вы можете только наблюдать за процессом.");
+            gamer.setSpectator();
             return;
         }
 
         final String joinMessage = "Игрок %s §fприсоединился к игре (§c%s§8/§a%s)";
         final int online = Bukkit.getOnlinePlayers().size();
-        final int maxOnline = MANAGEMENT.GAME_SETTINGS.MAX_PLAYERS_COUNT;
+        final int maxOnline = MANAGEMENT.gameSettings.MAX_PLAYERS_COUNT;
 
         broadcast(String.format(joinMessage, player.getDisplayName(), online, maxOnline), true);
-
-        final GamePerk gamePerk = MANAGEMENT.SQL_PERK_HANDLER.getPlayerPerkByName(player.getName());
-        final List<GamePerk> purchasePerk = MANAGEMENT.SQL_PERK_HANDLER.getPlayerPerksByName(player.getName());
-
-        gamer.setPerk(gamePerk);
-        gamer.setPurchasePerks(purchasePerk);
 
     }
 

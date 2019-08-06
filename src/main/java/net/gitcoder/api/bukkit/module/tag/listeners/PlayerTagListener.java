@@ -15,7 +15,7 @@ public class PlayerTagListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         Bukkit.getScheduler().runTaskLaterAsynchronously(GitAPI.getInstance(), () -> {
             if(!event.getPlayer().isOnline()) return;
-            Management.TAG_MANAGER.sendTags(event.getPlayer());
+            GitAPI.MANAGEMENT.tagManager.sendTags(event.getPlayer());
         }, 10L);
 
         Bukkit.getScheduler().runTaskLaterAsynchronously(GitAPI.getInstance(), () -> {
@@ -26,6 +26,6 @@ public class PlayerTagListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        Management.TAG_MANAGER.clearTag(e.getPlayer());
+        GitAPI.MANAGEMENT.tagManager.clearTag(e.getPlayer());
     }
 }
